@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Advanced Styling and Layout with CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with a top tab-based navigation for three sections: "Custom Fonts", "Responsive Design", and "Professional Theming". This structure isolates complex topics for focused learning. The interactive elements are designed to provide immediate visual feedback, which is crucial for understanding advanced CSS concepts like responsiveness and theming. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 5.1 (Custom Fonts): A "Font Switcher" allows users to toggle between a default system font and a custom-loaded Google Font ('Lora'). This demonstrates the visual impact of `font-family` and `@font-face` rules, which are explained in an accompanying code block and file tree diagram. Goal: Demonstrate & Explain. Method: HTML/CSS/JS.
+        - Sec 5.2 (Responsive Design): A "Resizable Preview Pane" controlled by a slider simulates different screen sizes. As the user drags the slider, the layout inside the pane changes (e.g., columns stack), and the active media query is highlighted in the CSS code, directly illustrating the core principle of responsive design. Goal: Demonstrate & Visualize. Method: HTML/CSS/JS.
+        - Sec 5.3 (Professional Theming): A "Theming Challenge" presents users with a target design mock (inspired by modern web aesthetics) and a CSS sandbox. The goal is to write CSS to match the unstyled elements to the professional theme, teaching them to analyze and translate design elements into code. Goal: Practice & Analyze. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .interactive-highlight {
+            outline: 2px solid #0ea5e9;
+            background-color: rgba(14, 165, 233, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .font-lora {
+            font-family: 'Lora', serif;
+        }
+        #responsive-preview-pane {
+             resize: horizontal;
+             overflow: auto;
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 5: Advanced Styling and Layout</h1>
+            <p class="mt-2 text-lg text-stone-600">Explore custom fonts, responsive design, and professional theming.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="fonts">5.1 Custom Fonts</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="responsive">5.2 Responsive Design</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="theming">5.3 Professional Theming</button>
+        </nav>
+
+        <main>
+            <!-- Section 5.1: Custom Fonts -->
+            <section id="fonts" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">5.1 Working with Custom Fonts</h2>
+                    <p class="text-stone-600 mb-6">Standard web fonts are limited. Custom fonts give your site a unique personality. You use the `@font-face` rule in CSS to define a name for your font and point to the font file. Then, you apply it with `font-family`.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Font Switcher</h3>
+                            <div class="mb-4">
+                                <button id="font-btn-default" class="px-3 py-1 bg-stone-200 rounded-md">Default Font</button>
+                                <button id="font-btn-custom" class="px-3 py-1 bg-stone-200 rounded-md">Custom Font</button>
+                            </div>
+                            <h2 id="font-preview-heading" class="text-3xl font-bold mb-2">This is a heading.</h2>
+                            <p id="font-preview-text">This is a paragraph of body text. Switching the font will change the entire look and feel of the content.</p>
+                        </div>
+                        <div class="code-block">
+<pre><code><span class="text-stone-400">/* 1. Define the custom font in CSS */</span>
+@font-face {
+  font-family: 'My Custom Font';
+  src: url('fonts/MyFont.woff2') format('woff2');
+}
+
+<span class="text-stone-400">/* 2. Apply the font to elements */</span>
+<span id="font-css-output">body {
+  font-family: 'Inter', sans-serif;
+}</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5.2: Responsive Design -->
+            <section id="responsive" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">5.2 Responsive Design for Mobile Devices</h2>
+                    <p class="text-stone-600 mb-6">A responsive website looks good on all devices, from large desktops to small mobile phones. This is achieved with CSS Media Queries, which apply styles only when certain conditions are met (like the screen width). Drag the slider to resize the preview pane and see the layout change.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <label for="width-slider">Screen Width:</label>
+                            <input id="width-slider" type="range" min="300" max="900" value="900" class="w-full">
+                            <span id="width-value" class="font-mono bg-stone-200 px-2 py-1 rounded">900px</span>
+                        </div>
+                        <div id="responsive-preview-container" class="preview-pane overflow-hidden">
+                            <div id="responsive-preview-pane" class="w-[900px] bg-white p-4">
+                                <style id="responsive-style-tag">
+                                    #responsive-content-wrapper { display: flex; flex-direction: row; gap: 1rem; }
+                                    #responsive-main { flex-grow: 1; }
+                                    #responsive-sidebar { flex-shrink: 0; width: 150px; }
+                                    @media (max-width: 600px) {
+                                        #responsive-content-wrapper { flex-direction: column; }
+                                        #responsive-sidebar { width: 100%; }
+                                    }
+                                </style>
+                                <header class="bg-stone-800 text-white p-2 rounded mb-2">Header</header>
+                                <div id="responsive-content-wrapper">
+                                    <main id="responsive-main" class="bg-stone-200 p-2 rounded">Main Content</main>
+                                    <aside id="responsive-sidebar" class="bg-stone-300 p-2 rounded">Sidebar</aside>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre><code><span id="desktop-styles-code">/* Default styles (for larger screens) */
+.container {
+  display: flex; <span class="text-stone-400">/* side-by-side */</span>
+}
+</span>
+<span id="mobile-styles-code">/* Styles for screens 600px or less */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column; <span class="text-stone-400">/* stacked */</span>
+  }
+}</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 5.3: Professional Theming -->
+            <section id="theming" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">5.3 Professional Theming</h2>
+                    <p class="text-stone-600 mb-6">Theming involves analyzing an existing design and recreating it with CSS. This means identifying colors, fonts, spacing, and other visual details. Your challenge is to style the "unstyled" elements to match the "Target Theme" on the right.</p>
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h3 class="font-semibold mb-2">Theming Sandbox</h3>
+                            <div id="theming-sandbox" class="preview-pane">
+                                 <style id="theming-style-tag"></style>
+                                 <div class="p-2 space-y-4">
+                                     <h1 class="sandbox-h1 text-2xl font-bold">Data-Driven Solutions</h1>
+                                     <p class="sandbox-p text-sm">We provide insights to grow your business.</p>
+                                     <button class="sandbox-btn px-3 py-1">Get Started</button>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-1">
+                             <h3 class="font-semibold mb-2">Your CSS</h3>
+                             <textarea id="theming-input" class="w-full font-mono text-sm p-2 border border-stone-300 rounded-md h-64" placeholder="/* Use CSS to match the theme! */"></textarea>
+                             <button id="theming-solution-btn" class="mt-2 w-full px-3 py-1 bg-stone-600 text-white rounded-md hover:bg-stone-700">Show Solution</button>
+                        </div>
+                        <div class="lg:col-span-1">
+                            <h3 class="font-semibold mb-2">Target Theme</h3>
+                            <div class="p-6 rounded-lg bg-[#0A2540] text-white space-y-4">
+                                <h1 class="text-3xl font-bold">Data-Driven Solutions</h1>
+                                <p class="text-stone-300">We provide insights to grow your business.</p>
+                                <button class="px-4 py-2 bg-[#635BFF] font-semibold rounded-full hover:bg-[#7B75FF]">Get Started</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('fonts');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 5.1 Custom Fonts
+            const initCustomFonts = () => {
+                const section = document.getElementById('fonts');
+                if (!section) return;
+                const heading = section.querySelector('#font-preview-heading');
+                const text = section.querySelector('#font-preview-text');
+                const btnDefault = section.querySelector('#font-btn-default');
+                const btnCustom = section.querySelector('#font-btn-custom');
+                const cssOutput = section.querySelector('#font-css-output');
+                
+                btnDefault.addEventListener('click', () => {
+                    heading.classList.remove('font-lora');
+                    text.classList.remove('font-lora');
+                    cssOutput.textContent = `body {\n  font-family: 'Inter', sans-serif;\n}`;
+                    btnDefault.classList.add('interactive-highlight');
+                    btnCustom.classList.remove('interactive-highlight');
+                });
+
+                btnCustom.addEventListener('click', () => {
+                    heading.classList.add('font-lora');
+                    text.classList.add('font-lora');
+                    cssOutput.textContent = `body {\n  font-family: 'My Custom Font', serif;\n}`;
+                    btnCustom.classList.add('interactive-highlight');
+                    btnDefault.classList.remove('interactive-highlight');
+                });
+                btnDefault.click();
+            };
+
+            // 5.2 Responsive Design
+            const initResponsiveDesign = () => {
+                const section = document.getElementById('responsive');
+                if (!section) return;
+                const slider = section.querySelector('#width-slider');
+                const widthValue = section.querySelector('#width-value');
+                const pane = section.querySelector('#responsive-preview-pane');
+                const desktopCode = section.querySelector('#desktop-styles-code');
+                const mobileCode = section.querySelector('#mobile-styles-code');
+
+                slider.addEventListener('input', () => {
+                    const width = slider.value;
+                    widthValue.textContent = `${width}px`;
+                    pane.style.width = `${width}px`;
+
+                    if (width <= 600) {
+                        mobileCode.classList.add('interactive-highlight');
+                        desktopCode.classList.remove('interactive-highlight');
+                    } else {
+                        mobileCode.classList.remove('interactive-highlight');
+                        desktopCode.classList.add('interactive-highlight');
+                    }
+                });
+                slider.dispatchEvent(new Event('input'));
+            };
+
+            // 5.3 Professional Theming
+            const initTheming = () => {
+                const section = document.getElementById('theming');
+                if(!section) return;
+                const textarea = section.querySelector('#theming-input');
+                const styleTag = section.querySelector('#theming-style-tag');
+                const solutionBtn = section.querySelector('#theming-solution-btn');
+                const solution = `.sandbox-h1 {
+  color: #0A2540;
+}
+.sandbox-p {
+  color: #425466;
+}
+.sandbox-btn {
+  background-color: #635BFF;
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 9999px;
+}`;
+
+                const applyStyles = () => {
+                    styleTag.textContent = textarea.value;
+                };
+
+                textarea.addEventListener('input', applyStyles);
+                solutionBtn.addEventListener('click', () => {
+                    textarea.value = solution;
+                    applyStyles();
+                });
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initCustomFonts();
+            initResponsiveDesign();
+            initTheming();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Advanced Responsive Design and Multimedia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with top tab-based navigation for five sections: "Viewport Tag", "Media Queries", "Responsive Images", "Audio & Video", and "The Script Element". This structure breaks down advanced topics into manageable segments. The interactions focus on visualizing abstract concepts like the viewport and media query breakpoints to make them concrete for learners. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 9.1 (Viewport): A side-by-side "Mobile Simulator" shows a simple page rendered with and without the viewport meta tag. This provides a stark, immediate demonstration of why the tag is essential for mobile browsing. Goal: Demonstrate & Explain. Method: HTML/CSS/JS.
+        - Sec 9.2 (Media Queries): An interactive "Layout Debugger" features a resizable preview pane. As the user resizes the pane, the layout changes, and the corresponding `@media` rule in a CSS block is highlighted, directly connecting the screen size to the applied style. Goal: Visualize & Guide. Method: HTML/CSS/JS.
+        - Sec 9.3 (Responsive Images): A "Responsive Image Loader" demonstrates the `<picture>` element. A slider simulates screen size changes, and the preview dynamically loads a different placeholder image (e.g., small, medium, large) while highlighting the active `<source>` tag in the code. Goal: Demonstrate & Deconstruct. Method: HTML/CSS/JS.
+        - Sec 9.4 (Audio/Video): A clean presentation of the `<audio>` and `<video>` elements with standard browser controls. The focus is on the correct HTML syntax, showing users how simple it is to embed media. Goal: Inform & Explain. Method: HTML/CSS.
+        - Sec 9.5 (Script Element): A "JavaScript Demo" includes a button that, when clicked, executes a simple script to change text on the page. This provides a safe, clear example of the `<script>` tag's purpose and its ability to add interactivity. Goal: Practice & Demonstrate. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .interactive-highlight {
+            outline: 2px solid #0ea5e9;
+            background-color: rgba(14, 165, 233, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .phone-bezel {
+            border: 8px solid #333;
+            border-radius: 30px;
+            overflow: hidden;
+            width: 300px;
+            height: 600px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 9: Advanced Responsive Design & Multimedia</h1>
+            <p class="mt-2 text-lg text-stone-600">Create fully responsive, media-rich websites.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="viewport">9.1 The Viewport</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="queries">9.2 Media Queries</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="images">9.3 Responsive Images</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="media">9.4 Audio & Video</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="script">9.5 The Script Element</button>
+        </nav>
+
+        <main>
+            <!-- Section 9.1: The Viewport -->
+            <section id="viewport" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">9.1 Mobile Sites and the Viewport</h2>
+                    <p class="text-stone-600 mb-6">Mobile browsers try to show the desktop version of a site by default, making it look tiny. The viewport meta tag tells the browser to render the page at the width of the device's screen, making your site readable. See the difference below.</p>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div>
+                             <h3 class="font-semibold mb-2 text-center">Without Viewport Tag</h3>
+                            <div class="phone-bezel mx-auto">
+                                <iframe srcdoc="<html><body style='width:980px;border:2px solid #ef4444;'>Desktop Layout (980px)</body></html>" class="w-full h-full border-0" style="transform: scale(0.3); transform-origin: 0 0; width: 333.33%; height: 333.33%;"></iframe>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-center">With Viewport Tag</h3>
+                             <div class="phone-bezel mx-auto">
+                                <iframe srcdoc="<html><head><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body style='border:2px solid #22c55e;'>Mobile Layout</body></html>" class="w-full h-full border-0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="code-block mt-8">
+<pre><code><span class="text-stone-400">&lt;!-- Add this tag inside the &lt;head&gt; of your HTML --&gt;</span>
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9.2: Media Queries -->
+            <section id="queries" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">9.2 Responsive Techniques with Media Queries</h2>
+                    <p class="text-stone-600 mb-6">Media queries are the core of responsive design. They allow you to apply specific CSS rules only when the browser window is a certain size. Drag the slider to resize the preview and see which media query is active.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <label for="mq-width-slider">Screen Width:</label>
+                            <input id="mq-width-slider" type="range" min="300" max="1000" value="1000" class="w-full">
+                            <span id="mq-width-value" class="font-mono bg-stone-200 px-2 py-1 rounded">1000px</span>
+                        </div>
+                        <div class="preview-pane overflow-hidden" id="mq-preview-container">
+                            <div id="mq-preview-pane" class="w-[1000px] p-4 bg-white">
+                                <style id="mq-style-tag"></style>
+                                <div id="mq-content" class="p-4 rounded-lg text-center font-bold text-white transition-colors duration-300">Layout</div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre><code><span id="mq-desktop" class="transition-all duration-200">.content { background-color: #2563eb; } <span class="text-stone-400">/* Default */</span></span>
+<span id="mq-tablet" class="transition-all duration-200">@media (max-width: 768px) {
+  .content { background-color: #16a34a; } <span class="text-stone-400">/* Tablet */</span>
+}</span>
+<span id="mq-mobile" class="transition-all duration-200">@media (max-width: 480px) {
+  .content { background-color: #f97316; } <span class="text-stone-400">/* Mobile */</span>
+}</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 9.3: Responsive Images -->
+            <section id="images" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">9.3 Responsive Images</h2>
+                    <p class="text-stone-600 mb-6">Serving huge images to small mobile devices wastes bandwidth. The `<picture>` element lets you provide different image sources for different screen sizes. The browser will automatically pick the most appropriate one.</p>
+                     <div class="grid lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-semibold mb-2">Image Preview</h3>
+                             <div class="preview-pane flex items-center justify-center">
+                                 <picture>
+                                    <source id="img-src-small" srcset="https://placehold.co/150x150/f97316/ffffff?text=Small" media="(max-width: 480px)">
+                                    <source id="img-src-medium" srcset="https://placehold.co/300x300/16a34a/ffffff?text=Medium" media="(max-width: 768px)">
+                                    <img id="responsive-img" src="https://placehold.co/400x400/2563eb/ffffff?text=Large" alt="A responsive image" class="max-w-full h-auto rounded-md">
+                                </picture>
+                            </div>
+                             <div class="mt-4">
+                                <label for="img-width-slider">Simulated Screen Width:</label>
+                                <input id="img-width-slider" type="range" min="300" max="1000" value="1000" class="w-full">
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre><code><span class="text-stone-400">&lt;!-- Browser checks from top to bottom --&gt;</span>
+&lt;picture&gt;
+  <span id="code-src-small" class="transition-all duration-200">&lt;source srcset="small.jpg" 
+          media="(max-width: 480px)"&gt;</span>
+  <span id="code-src-medium" class="transition-all duration-200">&lt;source srcset="medium.jpg" 
+          media="(max-width: 768px)"&gt;</span>
+  <span id="code-src-large" class="transition-all duration-200">&lt;img src="large.jpg" alt="..."&gt;</span>
+&lt;/picture&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Section 9.4: Audio & Video -->
+            <section id="media" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">9.4 Embedding Audio and Video</h2>
+                    <p class="text-stone-600 mb-6">HTML provides `<audio>` and `<video>` elements for embedding media directly into a page. The `controls` attribute gives the user standard playback controls like play, pause, and volume.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                             <h3 class="font-semibold mb-2">Audio Player</h3>
+                             <audio controls class="w-full">
+                                <source src="horse.ogg" type="audio/ogg">
+                                Your browser does not support the audio element.
+                             </audio>
+                             <div class="code-block mt-4 text-sm">
+<pre><code>&lt;audio controls&gt;
+  &lt;source src="path/to/audio.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+                             </div>
+                        </div>
+                         <div class="preview-pane">
+                             <h3 class="font-semibold mb-2">Video Player</h3>
+                             <video controls class="w-full rounded-md bg-black">
+                                <source src="movie.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                             </video>
+                              <div class="code-block mt-4 text-sm">
+<pre><code>&lt;video controls class="w-full"&gt;
+  &lt;source src="path/to/video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- Section 9.5: The Script Element -->
+            <section id="script" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">9.5 The Script Element</h2>
+                    <p class="text-stone-600 mb-6">While HTML provides structure and CSS provides style, JavaScript provides interactivity. The `<script>` element is used to include client-side scripts. It's often placed just before the closing `</body>` tag so the page content loads first.</p>
+                     <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane text-center">
+                            <h3 class="font-semibold mb-2">JavaScript Demo</h3>
+                            <p id="script-demo-text" class="text-lg font-medium text-stone-500 mb-4">Click the button!</p>
+                            <button id="script-demo-btn" class="px-4 py-2 bg-sky-500 text-white rounded-md font-semibold">Change Text</button>
+                        </div>
+                        <div class="code-block">
+<pre><code>&lt;body&gt;
+  &lt;!-- All your HTML content --&gt;
+  &lt;p id="my-text"&gt;Hello&lt;/p&gt;
+  &lt;button id="my-button"&gt;Click&lt;/button&gt;
+
+  &lt;!-- Script tag at the bottom --&gt;
+  &lt;script&gt;
+    const button = document.getElementById('my-button');
+    const text = document.getElementById('my-text');
+    button.addEventListener('click', () => {
+      text.textContent = 'You clicked me!';
+    });
+  &lt;/script&gt;
+&lt;/body&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('viewport');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 9.2 Media Queries
+            const initMediaQueries = () => {
+                const section = document.getElementById('queries');
+                if (!section) return;
+                const slider = section.querySelector('#mq-width-slider');
+                const widthValue = section.querySelector('#mq-width-value');
+                const pane = section.querySelector('#mq-preview-pane');
+                const content = section.querySelector('#mq-content');
+                const codeDesktop = section.querySelector('#mq-desktop');
+                const codeTablet = section.querySelector('#mq-tablet');
+                const codeMobile = section.querySelector('#mq-mobile');
+
+                slider.addEventListener('input', () => {
+                    const width = slider.value;
+                    widthValue.textContent = `${width}px`;
+                    pane.style.width = `${width}px`;
+                    
+                    codeDesktop.classList.remove('interactive-highlight');
+                    codeTablet.classList.remove('interactive-highlight');
+                    codeMobile.classList.remove('interactive-highlight');
+
+                    if (width <= 480) {
+                        content.style.backgroundColor = '#f97316';
+                        content.textContent = 'Mobile Layout';
+                        codeMobile.classList.add('interactive-highlight');
+                    } else if (width <= 768) {
+                        content.style.backgroundColor = '#16a34a';
+                        content.textContent = 'Tablet Layout';
+                        codeTablet.classList.add('interactive-highlight');
+                    } else {
+                        content.style.backgroundColor = '#2563eb';
+                        content.textContent = 'Desktop Layout';
+                        codeDesktop.classList.add('interactive-highlight');
+                    }
+                });
+                slider.dispatchEvent(new Event('input'));
+            };
+
+            // 9.3 Responsive Images
+            const initResponsiveImages = () => {
+                const section = document.getElementById('images');
+                if (!section) return;
+                const slider = section.querySelector('#img-width-slider');
+                const img = section.querySelector('#responsive-img');
+                const codeSmall = section.querySelector('#code-src-small');
+                const codeMedium = section.querySelector('#code-src-medium');
+                const codeLarge = section.querySelector('#code-src-large');
+                
+                slider.addEventListener('input', () => {
+                    const width = slider.value;
+                    const container = img.parentElement;
+                    container.style.width = `${width}px`; // Simulate viewport for picture element
+                    
+                    // Manually update img src for visual demo as picture element is complex
+                    if (width <= 480) {
+                        img.src = 'https://placehold.co/150x150/f97316/ffffff?text=Small';
+                        codeSmall.classList.add('interactive-highlight');
+                        codeMedium.classList.remove('interactive-highlight');
+                        codeLarge.classList.remove('interactive-highlight');
+                    } else if (width <= 768) {
+                        img.src = 'https://placehold.co/300x300/16a34a/ffffff?text=Medium';
+                        codeSmall.classList.remove('interactive-highlight');
+                        codeMedium.classList.add('interactive-highlight');
+                        codeLarge.classList.remove('interactive-highlight');
+                    } else {
+                        img.src = 'https://placehold.co/400x400/2563eb/ffffff?text=Large';
+                        codeSmall.classList.remove('interactive-highlight');
+                        codeMedium.classList.remove('interactive-highlight');
+                        codeLarge.classList.add('interactive-highlight');
+                    }
+                });
+                slider.dispatchEvent(new Event('input'));
+            };
+
+            // 9.5 The Script Element
+            const initScriptDemo = () => {
+                const section = document.getElementById('script');
+                if (!section) return;
+                const demoBtn = section.querySelector('#script-demo-btn');
+                const demoText = section.querySelector('#script-demo-text');
+                
+                demoBtn.addEventListener('click', () => {
+                    demoText.textContent = 'The JavaScript code just ran!';
+                    demoText.classList.add('text-green-600');
+                });
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initMediaQueries();
+            initResponsiveImages();
+            initScriptDemo();
+        });
+    </script>
+</body>
+</html>

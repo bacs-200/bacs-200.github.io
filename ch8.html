@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Final Project - Real-World Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with top tab-based navigation for three sections: "Choosing a Business", "Assembling the Website", and "Community Engagement". This structure walks the student through the final project lifecycle, from planning to execution and outreach. The interactive elements are designed to transform abstract requirements and grading criteria into tangible, actionable steps. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 8.1 (Choosing a Business): An "Organization Selector Checklist" interactively guides students through the selection criteria. Checking all boxes reveals a confirmation message, turning requirements into an engaging task. Goal: Guide & Reinforce. Method: HTML/CSS/JS.
+        - Sec 8.2 (Assembling the Website): A "Final Project Grader" simulator presents a visual file structure and lets the user "run a check" against the grading criteria. The results dynamically show which requirements are met, clarifying the project's technical specifications. Goal: Deconstruct & Explain. Method: HTML/CSS/JS.
+        - Sec 8.3 (Community Engagement): An "Email Draft Builder" provides a template for professional outreach. Users can fill in fields to generate a sample email, making the concept of professional communication less daunting and more practical. Goal: Guide & Practice. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .criteria-pass {
+            color: #16a34a; /* green-600 */
+        }
+        .criteria-fail {
+            color: #ef4444; /* red-500 */
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 8: Final Project - Real-World Application</h1>
+            <p class="mt-2 text-lg text-stone-600">Apply all your skills to build a professional marketing website.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="choosing">8.1 Choosing a Business</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="assembling">8.2 Assembling the Website</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="engagement">8.3 Community Engagement</button>
+        </nav>
+
+        <main>
+            <!-- Section 8.1: Choosing a Business -->
+            <section id="choosing" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">8.1 Choosing a Business or Organization</h2>
+                    <p class="text-stone-600 mb-6">Your final project is to create a marketing website for a real-world business or organization. The goal is to design a site that helps them attract new customers or members. Use the checklist to ensure your chosen organization is a good fit for the project.</p>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Organization Selection Checklist</h3>
+                            <div id="checklist-container" class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-real" class="checklist-item h-5 w-5 rounded">
+                                    <label for="check-real">Is it a real for-profit or non-profit organization?</label>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-attract" class="checklist-item h-5 w-5 rounded">
+                                    <label for="check-attract">Is the site's goal to attract people to the business?</label>
+                                </div>
+                                 <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-info" class="checklist-item h-5 w-5 rounded">
+                                    <label for="check-info">Can you find enough information online to build a site?</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="checklist-status" class="flex items-center justify-center p-6 bg-stone-100 rounded-lg text-stone-500">
+                             <p>Complete the checklist to confirm your choice.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8.2: Assembling the Website -->
+            <section id="assembling" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">8.2 Assembling the Final Website</h2>
+                    <p class="text-stone-600 mb-6">This section details the grading criteria for your final project. The structure is specific, requiring the homepage to be in a `/marketing/` folder. Click the button to simulate running a "grader" on a sample project to see if it meets the requirements.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Sample Project Structure</h3>
+                             <div class="font-mono text-sm space-y-2 bg-stone-100 p-4 rounded">
+                                <div>📁 my-final-project/</div>
+                                <div class="pl-4">📁 marketing/</div>
+                                <div class="pl-8">📄 index.html</div>
+                                <div class="pl-8">📄 services.html</div>
+                                <div class="pl-4">📁 css/</div>
+                                <div class="pl-8">📄 main.css (<span class="text-sky-600">6 rules</span>)</div>
+                            </div>
+                            <button id="grade-btn" class="mt-4 w-full bg-stone-600 text-white rounded-md py-2 hover:bg-stone-700">Run Grader</button>
+                        </div>
+                         <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Grading Criteria Check</h3>
+                            <ul id="grading-results" class="space-y-2">
+                                <!-- Results will be populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 8.3: Community Engagement -->
+            <section id="engagement" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">8.3 Community Engagement and Professional Impact</h2>
+                    <p class="text-stone-600 mb-6">Sharing your finished project with the business can be a great way to make a real-world impact and build your portfolio. It's a professional courtesy and a valuable networking opportunity. Use the email builder below to draft a professional outreach message.</p>
+                     <div class="grid lg:grid-cols-2 gap-8">
+                        <div>
+                             <h3 class="font-semibold mb-2">Email Draft Builder</h3>
+                             <div class="space-y-3">
+                                <input type="text" id="email-org-name" placeholder="Organization Name" class="w-full px-3 py-2 border rounded-md">
+                                <input type="text" id="email-your-name" placeholder="Your Name" class="w-full px-3 py-2 border rounded-md">
+                                <input type="text" id="email-your-site" placeholder="Link to Your Project" class="w-full px-3 py-2 border rounded-md">
+                             </div>
+                        </div>
+                        <div class="preview-pane text-sm">
+                            <h3 class="font-semibold mb-2">Generated Email Draft</h3>
+                            <div id="email-output" class="p-2 bg-white border border-stone-200 rounded">
+                                <!-- Draft will be populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('choosing');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 8.1 Choosing a Business
+            const initChecklist = () => {
+                const section = document.getElementById('choosing');
+                if (!section) return;
+                const checkboxes = section.querySelectorAll('.checklist-item');
+                const statusDiv = section.querySelector('#checklist-status');
+                
+                const checkStatus = () => {
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    if (allChecked) {
+                        statusDiv.innerHTML = '<p class="font-bold text-green-600">Great choice! This organization meets all the project requirements.</p>';
+                        statusDiv.classList.add('bg-green-100');
+                    } else {
+                        statusDiv.innerHTML = '<p>Complete the checklist to confirm your choice.</p>';
+                        statusDiv.classList.remove('bg-green-100');
+                    }
+                };
+
+                checkboxes.forEach(cb => cb.addEventListener('change', checkStatus));
+            };
+
+            // 8.2 Assembling the Website
+            const initGrader = () => {
+                const section = document.getElementById('assembling');
+                if (!section) return;
+                const gradeBtn = section.querySelector('#grade-btn');
+                const resultsList = section.querySelector('#grading-results');
+                
+                const criteria = [
+                    { text: 'Homepage at /marketing/index.html', pass: true },
+                    { text: 'All pages link to a stylesheet', pass: true },
+                    { text: 'At least 5 CSS rules per page', pass: true },
+                    { text: 'Link to business\'s existing website', pass: false },
+                ];
+
+                gradeBtn.addEventListener('click', () => {
+                    resultsList.innerHTML = '';
+                    criteria.forEach(item => {
+                        const li = document.createElement('li');
+                        const icon = item.pass ? '✓' : '✗';
+                        const colorClass = item.pass ? 'criteria-pass' : 'criteria-fail';
+                        li.className = `flex items-center gap-2 font-medium ${colorClass}`;
+                        li.innerHTML = `<span>${icon}</span> <span>${item.text}</span>`;
+                        resultsList.appendChild(li);
+                    });
+                    const li_missing = resultsList.querySelector('.criteria-fail');
+                    if(li_missing) li_missing.parentNode.innerHTML += `<p class="text-xs text-stone-500 mt-2">The sample project is missing a link to the real business site.</p>`;
+                });
+            };
+            
+            // 8.3 Community Engagement
+            const initEmailBuilder = () => {
+                const section = document.getElementById('engagement');
+                if(!section) return;
+                const orgNameInput = section.querySelector('#email-org-name');
+                const yourNameInput = section.querySelector('#email-your-name');
+                const siteLinkInput = section.querySelector('#email-your-site');
+                const emailOutput = section.querySelector('#email-output');
+
+                const updateEmail = () => {
+                    const orgName = orgNameInput.value || '[Organization Name]';
+                    const yourName = yourNameInput.value || '[Your Name]';
+                    const siteLink = siteLinkInput.value || '[Link to Your Project]';
+
+                    emailOutput.innerHTML = `
+                        <p class="font-bold">Subject: A Web Design Project about ${orgName}</p>
+                        <br>
+                        <p>Dear ${orgName} team,</p>
+                        <br>
+                        <p>My name is ${yourName}, and I am a web development student. For my final project, I created a new marketing website design inspired by your organization.</p>
+                        <br>
+                        <p>You can view the project here: <a href="${siteLink}" target="_blank" class="text-sky-600">${siteLink}</a></p>
+                        <br>
+                        <p>This was purely a school project, but you are welcome to use any of the ideas or code free of charge. I hope you find it interesting!</p>
+                        <br>
+                        <p>Sincerely,<br>${yourName}</p>
+                    `;
+                };
+
+                orgNameInput.addEventListener('input', updateEmail);
+                yourNameInput.addEventListener('input', updateEmail);
+                siteLinkInput.addEventListener('input', updateEmail);
+                updateEmail();
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initChecklist();
+            initGrader();
+            initEmailBuilder();
+        });
+    </script>
+</body>
+</html>

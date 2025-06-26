@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Project Management and Best Practices</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with top tab-based navigation for three sections: "File Organization", "Code Validation", and "Professional Quality". This structure completes the learning series with a focus on professional workflows. The interactive elements are designed to simulate real-world development tasks like file management and debugging. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 7.1 (File Organization): A visual "File Organizer" shows a messy project structure vs. an organized one. Clicking a file in the "messy" view will visually "move" it to the correct folder in the "organized" view and update a code snippet to show the correct new path, directly teaching the concept of relative paths. Goal: Visualize & Guide. Method: HTML/CSS/JS.
+        - Sec 7.2 (Code Validation): A "Code Validator Simulator" presents a block of HTML with common errors. A "Validate" button triggers a "results" pane that lists the errors and explains why they are problems, mimicking the experience of using a real tool like the W3C validator. Goal: Demonstrate & Explain. Method: HTML/CSS/JS.
+        - Sec 7.3 (Professional Quality): A "Quality Checklist" shows a "before" component with typos and broken elements. As the user clicks "Fix Next Issue", the visual component updates to fix one problem at a time, and the corresponding item on the checklist gets checked off. This provides a satisfying, step-by-step reinforcement of the proofreading process. Goal: Practice & Reinforce. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .file-item {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .file-item:hover {
+             background-color: #e7e5e4;
+        }
+        .validation-error {
+            border-left: 4px solid #ef4444;
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+        .validation-warning {
+            border-left: 4px solid #f97316;
+            background-color: rgba(249, 115, 22, 0.05);
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 7: Project Management & Best Practices</h1>
+            <p class="mt-2 text-lg text-stone-600">Finalize your project with professional organization and validation.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="organization">7.1 File Organization</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="validation">7.2 Code Validation</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="quality">7.3 Professional Quality</button>
+        </nav>
+
+        <main>
+            <!-- Section 7.1: File Organization -->
+            <section id="organization" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">7.1 File and Folder Organization</h2>
+                    <p class="text-stone-600 mb-6">A clean folder structure makes your project easier to manage and scale. The standard practice is to place stylesheets in a `css/` folder and images in an `images/` folder. Click a file in the "Messy Project" to see how its path changes when moved.</p>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">File Organizer</h3>
+                            <div class="grid grid-cols-2 gap-4 font-mono text-sm">
+                                <div>
+                                    <h4 class="font-bold mb-2">Messy Project</h4>
+                                    <div class="space-y-1">
+                                        <div class="file-item p-1 rounded" data-file="style.css" data-type="css">📄 style.css</div>
+                                        <div class="file-item p-1 rounded" data-file="hero.jpg" data-type="img">🖼️ hero.jpg</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2">Organized Project</h4>
+                                    <div class="space-y-1">
+                                        <div>📄 index.html</div>
+                                        <div id="css-folder">📁 css/</div>
+                                        <div id="images-folder">📁 images/</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                             <h4 class="font-semibold text-white mb-2">Updating File Paths</h4>
+                             <p class="text-sm text-stone-400 mb-4">When you move a file, you must update the path in your HTML.</p>
+                             <pre><code id="org-code-output"><span class="text-stone-400">Click a file to see the path change...</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7.2: Code Validation -->
+            <section id="validation" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">7.2 Code Validation</h2>
+                    <p class="text-stone-600 mb-6">HTML validators check your code against web standards, helping you find errors and potential problems. The W3C Validator is the industry standard tool. Click the button below to simulate validating some faulty HTML.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                             <h3 class="font-semibold mb-2">Sample HTML with Errors</h3>
+                             <div class="code-block text-sm h-48">
+<pre><code>&lt;h1&gt;My Page&lt;/h1&gt;
+&lt;p&gt;This is an image:
+&lt;img src="photo.jpg"&gt;
+This is a link.&lt;/a&gt;</code></pre>
+                            </div>
+                            <button id="validate-btn" class="mt-2 w-full bg-stone-600 text-white rounded-md py-2 hover:bg-stone-700">Validate Code</button>
+                        </div>
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Validation Results</h3>
+                            <div id="validation-results" class="space-y-3 text-sm">
+                               <p class="text-stone-500">Click "Validate Code" to see results.</p>
+                            </div>
+                             <a href="https://validator.w3.org/" target="_blank" class="text-sky-600 hover:underline text-sm mt-4 inline-block">Visit the official W3C Validator →</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 7.3: Professional Quality -->
+            <section id="quality" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">7.3 Ensuring Professional Quality</h2>
+                    <p class="text-stone-600 mb-6">The final step is a quality check. This means proofreading for spelling and grammar errors, and ensuring all content displays correctly. Use the "Quality Checklist" below to fix the issues in the example component.</p>
+                     <div class="grid lg:grid-cols-2 gap-8">
+                        <div>
+                             <h3 class="font-semibold mb-2">Component with Issues</h3>
+                            <div id="quality-preview" class="p-4 rounded-lg bg-white border border-stone-200 space-y-2">
+                                <h2 id="quality-heading" class="text-2xl font-bold">Welocme to our Site!</h2>
+                                <p id="quality-text">Our services are the best. a great choice.</p>
+                                <img id="quality-image" src="https://placehold.co/200x100/ff0000/ffffff?text=BROKEN" alt="Company logo">
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2">Quality Checklist</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-spelling" class="h-5 w-5 rounded" disabled>
+                                    <label for="check-spelling">Fix spelling errors</label>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-grammar" class="h-5 w-5 rounded" disabled>
+                                    <label for="check-grammar">Fix grammar & capitalization</label>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="check-image" class="h-5 w-5 rounded" disabled>
+                                    <label for="check-image">Fix broken image</label>
+                                </div>
+                            </div>
+                            <button id="fix-issue-btn" class="mt-4 w-full bg-sky-500 text-white rounded-md py-2 hover:bg-sky-600">Fix Next Issue</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('organization');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 7.1 File Organization
+            const initOrganization = () => {
+                const section = document.getElementById('organization');
+                if (!section) return;
+                const fileItems = section.querySelectorAll('.file-item');
+                const codeOutput = section.querySelector('#org-code-output');
+                const cssFolder = section.querySelector('#css-folder');
+                const imagesFolder = section.querySelector('#images-folder');
+                
+                const codeSnippets = {
+                    'style.css': `&lt;!-- Path before --&gt;\n&lt;link rel="stylesheet" href="style.css"&gt;\n\n&lt;!-- Path after --&gt;\n&lt;link rel="stylesheet" href="css/style.css"&gt;`,
+                    'hero.jpg': `&lt;!-- Path before --&gt;\n&lt;img src="hero.jpg"&gt;\n\n&lt;!-- Path after --&gt;\n&lt;img src="images/hero.jpg"&gt;`
+                };
+
+                fileItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const file = item.dataset.file;
+                        const type = item.dataset.type;
+                        
+                        codeOutput.innerHTML = codeSnippets[file];
+                        
+                        const movedItem = document.createElement('div');
+                        movedItem.className = 'pl-4 text-stone-500';
+                        movedItem.textContent = item.textContent;
+
+                        if (type === 'css') {
+                            cssFolder.appendChild(movedItem);
+                        } else if (type === 'img') {
+                            imagesFolder.appendChild(movedItem);
+                        }
+                        item.style.display = 'none';
+                    });
+                });
+            };
+
+            // 7.2 Code Validation
+            const initValidation = () => {
+                const section = document.getElementById('validation');
+                if (!section) return;
+                const validateBtn = section.querySelector('#validate-btn');
+                const resultsDiv = section.querySelector('#validation-results');
+
+                validateBtn.addEventListener('click', () => {
+                    resultsDiv.innerHTML = `
+                        <div class="validation-error p-2">
+                            <p class="font-bold">Error: Stray end tag “a”.</p>
+                            <p class="text-xs">The &lt;/a&gt; tag doesn't have a matching opening &lt;a&gt; tag.</p>
+                        </div>
+                        <div class="validation-warning p-2">
+                            <p class="font-bold">Warning: &lt;img&gt; element missing “alt” attribute.</p>
+                             <p class="text-xs">Images should always have an 'alt' attribute for accessibility.</p>
+                        </div>
+                    `;
+                });
+            };
+
+            // 7.3 Professional Quality
+            const initQualityCheck = () => {
+                const section = document.getElementById('quality');
+                if (!section) return;
+                const fixBtn = section.querySelector('#fix-issue-btn');
+                const checkSpelling = section.querySelector('#check-spelling');
+                const checkGrammar = section.querySelector('#check-grammar');
+                const checkImage = section.querySelector('#check-image');
+                const heading = section.querySelector('#quality-heading');
+                const text = section.querySelector('#quality-text');
+                const image = section.querySelector('#quality-image');
+
+                let step = 0;
+                fixBtn.addEventListener('click', () => {
+                    step++;
+                    if (step === 1) {
+                        heading.textContent = 'Welcome to our Site!';
+                        checkSpelling.checked = true;
+                    } else if (step === 2) {
+                        text.textContent = 'Our services are the best. A great choice.';
+                        checkGrammar.checked = true;
+                    } else if (step === 3) {
+                        image.src = 'https://placehold.co/200x100/0ea5e9/ffffff?text=FIXED!';
+                        checkImage.checked = true;
+                        fixBtn.textContent = 'All Issues Fixed!';
+                        fixBtn.disabled = true;
+                        fixBtn.classList.add('bg-green-500', 'hover:bg-green-500');
+                    }
+                });
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initOrganization();
+            initValidation();
+            initQualityCheck();
+        });
+    </script>
+</body>
+</html>

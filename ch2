@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Structuring Content with HTML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with a top tab-based navigation to switch between four main content sections: "Headings & Paragraphs", "Hyperlinks", "Images", and "Lists & Tables". This structure maintains consistency with Chapter 1 and allows learners to focus on one concept at a time. Each section will feature a primary interactive component (e.g., a live editor, a link builder) to move beyond static examples and encourage hands-on learning. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 2.1 (Headings/Paragraphs): A live preview editor will allow users to type and see the rendered HTML for h1/p tags instantly. Goal: Demonstrate & Reinforce. Method: HTML/CSS/JS.
+        - Sec 2.2 (Hyperlinks): An interactive "Link Builder" will generate correct anchor tag syntax from user input for text and URL, differentiating between internal and external links. Goal: Guide & Explain. Method: HTML/CSS/JS.
+        - Sec 2.3 (Images): An "Image Tag Builder" will let users practice writing alt text and see how it fits into the `<img>` tag, with a placeholder image preview. This emphasizes accessibility. Goal: Teach & Reinforce. Method: HTML/CSS/JS.
+        - Sec 2.4 (Lists/Tables): A sub-tabbed interface will present `ul`, `ol`, and `table` examples cleanly. Each will have a code view and a rendered view side-by-side for direct comparison. Goal: Compare & Inform. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .sub-tab-btn.active {
+            background-color: #d4d4d8; /* stone-300 */
+            color: #1c1917; /* stone-900 */
+        }
+        .sub-content {
+            display: none;
+        }
+        .sub-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 2: Structuring Content with HTML</h1>
+            <p class="mt-2 text-lg text-stone-600">Learn the essential tags for creating clear and meaningful web content.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="headings">2.1 Headings & Paragraphs</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="links">2.2 Creating Hyperlinks</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="images">2.3 Embedding Images</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="lists">2.4 Lists & Tables</button>
+        </nav>
+
+        <main>
+            <!-- Section 2.1: Headings & Paragraphs -->
+            <section id="headings" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">2.1 Headings and Paragraphs</h2>
+                    <p class="text-stone-600 mb-6">Headings (`<h1>` through `<h6>`) and paragraphs (`<p>`) are the most fundamental elements for structuring text. Headings create a document outline, while paragraphs contain the main body of content. Try the live editor below to see how they work.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="h1-input" class="font-semibold block mb-2">Heading 1 Text:</label>
+                            <input id="h1-input" type="text" value="My Main Title" class="w-full px-4 py-2 border border-stone-300 rounded-md">
+                            
+                            <label for="p-input" class="font-semibold block mt-4 mb-2">Paragraph Text:</label>
+                            <textarea id="p-input" class="w-full px-4 py-2 border border-stone-300 rounded-md h-32">This is a paragraph of text. It's used for the main content of a section.</textarea>
+                        </div>
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Live Preview</h3>
+                            <div id="headings-preview">
+                                <h1>My Main Title</h1>
+                                <p>This is a paragraph of text. It's used for the main content of a section.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2.2: Creating Hyperlinks -->
+            <section id="links" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">2.2 Creating Hyperlinks</h2>
+                    <p class="text-stone-600 mb-6">Hyperlinks, created with the anchor tag (`<a>`), are what make the web a "web." They connect pages together. The `href` attribute specifies the destination URL. Use the builder below to create your own links.</p>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="link-text-input" class="font-semibold block mb-2">Link Text (what users see):</label>
+                            <input id="link-text-input" type="text" value="Visit Google" class="w-full px-4 py-2 border border-stone-300 rounded-md">
+                            
+                            <label for="link-href-input" class="font-semibold block mt-4 mb-2">URL (the destination):</label>
+                            <input id="link-href-input" type="text" value="https://www.google.com" class="w-full px-4 py-2 border border-stone-300 rounded-md">
+                        </div>
+                        <div class="preview-pane">
+                             <h3 class="font-semibold mb-2">Generated Code & Preview</h3>
+                             <div class="code-block text-sm mb-4">
+                                <code id="link-code-output">&lt;a href="https://www.google.com"&gt;Visit Google&lt;/a&gt;</code>
+                             </div>
+                             <div id="link-preview-output">
+                                <a href="https://www.google.com" target="_blank" class="text-sky-600 hover:underline">Visit Google</a>
+                             </div>
+                             <p class="text-xs text-stone-500 mt-4">Note: A link starting with `http` is an external link. A link to a local file like `about.html` is an internal link.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2.3: Embedding Images -->
+            <section id="images" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">2.3 Embedding Images</h2>
+                    <p class="text-stone-600 mb-6">Images bring life to a page. The `<img>` tag is used to embed them. It's a self-closing tag and has two essential attributes: `src` (the image source URL) and `alt` (alternative text for accessibility and SEO).</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                             <label for="img-alt-input" class="font-semibold block mt-4 mb-2">Alt Text (describe the image):</label>
+                            <input id="img-alt-input" type="text" value="A cute robot character" class="w-full px-4 py-2 border border-stone-300 rounded-md">
+                            <p class="text-xs text-stone-500 mt-2">Good alt text is crucial for screen readers and when images fail to load. Be descriptive!</p>
+                             <h3 class="font-semibold mb-2 mt-4">Generated Code</h3>
+                             <div class="code-block text-sm">
+                                <code id="img-code-output">&lt;img src="https://placehold.co/400x300/0ea5e9/ffffff?text=Character" alt="A cute robot character"&gt;</code>
+                             </div>
+                        </div>
+                        <div class="preview-pane flex flex-col items-center justify-center">
+                             <h3 class="font-semibold mb-2 w-full">Image Preview</h3>
+                             <img id="img-preview" src="https://placehold.co/400x300/0ea5e9/ffffff?text=Character" alt="A cute robot character" class="rounded-md max-w-full h-auto">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2.4: Lists & Tables -->
+            <section id="lists" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">2.4 Lists and Tables</h2>
+                    <p class="text-stone-600 mb-6">Lists and tables are used to organize information. Use unordered lists (`<ul>`) for bullet points, ordered lists (`<ol>`) for numbered steps, and tables (`<table>`) for grid-based data. Use the tabs below to explore each type.</p>
+                    
+                    <div class="mb-4 border-b border-stone-200">
+                        <nav class="-mb-px flex gap-4">
+                            <button class="sub-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300" data-subtab="ul">Unordered List</button>
+                            <button class="sub-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300" data-subtab="ol">Ordered List</button>
+                            <button class="sub-tab-btn whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300" data-subtab="table">Table</button>
+                        </nav>
+                    </div>
+
+                    <div id="ul" class="sub-content">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="code-block">
+<pre><code>&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                            </div>
+                            <div class="preview-pane">
+                                <ul class="list-disc list-inside">
+                                    <li>HTML</li>
+                                    <li>CSS</li>
+                                    <li>JavaScript</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                     <div id="ol" class="sub-content">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="code-block">
+<pre><code>&lt;ol&gt;
+  &lt;li&gt;Create repository&lt;/li&gt;
+  &lt;li&gt;Create index.html&lt;/li&gt;
+  &lt;li&gt;Publish site&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                            </div>
+                            <div class="preview-pane">
+                                <ol class="list-decimal list-inside">
+                                  <li>Create repository</li>
+                                  <li>Create index.html</li>
+                                  <li>Publish site</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                     <div id="table" class="sub-content">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="code-block">
+<pre><code>&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Language&lt;/th&gt;
+    &lt;th&gt;Purpose&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;HTML&lt;/td&gt;
+    &lt;td&gt;Structure&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;CSS&lt;/td&gt;
+    &lt;td&gt;Style&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+                            </div>
+                            <div class="preview-pane">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-stone-100">
+                                            <th class="border border-stone-200 p-2">Language</th>
+                                            <th class="border border-stone-200 p-2">Purpose</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-stone-200 p-2">HTML</td>
+                                            <td class="border border-stone-200 p-2">Structure</td>
+                                        </tr>
+                                         <tr>
+                                            <td class="border border-stone-200 p-2">CSS</td>
+                                            <td class="border border-stone-200 p-2">Style</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+
+            function showTab(tabId) {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            }
+
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            
+            showTab('headings');
+
+            // Section 2.1: Headings & Paragraphs
+            const h1Input = document.getElementById('h1-input');
+            const pInput = document.getElementById('p-input');
+            const headingsPreview = document.getElementById('headings-preview');
+
+            function updateHeadingsPreview() {
+                headingsPreview.innerHTML = `<h1>${h1Input.value}</h1><p>${pInput.value}</p>`;
+            }
+            h1Input.addEventListener('input', updateHeadingsPreview);
+            pInput.addEventListener('input', updateHeadingsPreview);
+
+            // Section 2.2: Hyperlinks
+            const linkTextInput = document.getElementById('link-text-input');
+            const linkHrefInput = document.getElementById('link-href-input');
+            const linkCodeOutput = document.getElementById('link-code-output');
+            const linkPreviewOutput = document.getElementById('link-preview-output');
+
+            function updateLink() {
+                const text = linkTextInput.value;
+                const href = linkHrefInput.value;
+                linkCodeOutput.textContent = `<a href="${href}">${text}</a>`;
+                linkPreviewOutput.innerHTML = `<a href="${href}" target="_blank" class="text-sky-600 hover:underline">${text}</a>`;
+            }
+            linkTextInput.addEventListener('input', updateLink);
+            linkHrefInput.addEventListener('input', updateLink);
+            
+            // Section 2.3: Images
+            const imgAltInput = document.getElementById('img-alt-input');
+            const imgCodeOutput = document.getElementById('img-code-output');
+            const imgPreview = document.getElementById('img-preview');
+            const imgSrc = "https://placehold.co/400x300/0ea5e9/ffffff?text=Character";
+
+            function updateImage() {
+                const alt = imgAltInput.value;
+                imgCodeOutput.textContent = `<img src="${imgSrc}" alt="${alt}">`;
+                imgPreview.alt = alt;
+            }
+            imgAltInput.addEventListener('input', updateImage);
+
+            // Section 2.4: Lists and Tables
+            const subTabs = document.querySelectorAll('.sub-tab-btn');
+            const subSections = document.querySelectorAll('.sub-content');
+
+            function showSubTab(subTabId) {
+                subTabs.forEach(tab => {
+                    const isActive = tab.dataset.subtab === subTabId;
+                    tab.classList.toggle('active', isActive);
+                    tab.classList.toggle('border-sky-500', isActive);
+                    tab.classList.toggle('text-sky-600', isActive);
+                    tab.classList.toggle('border-transparent', !isActive);
+                    tab.classList.toggle('text-stone-500', !isActive);
+                });
+                subSections.forEach(section => section.classList.toggle('active', section.id === subTabId));
+            }
+            subTabs.forEach(tab => tab.addEventListener('click', () => showSubTab(tab.dataset.subtab)));
+            showSubTab('ul');
+        });
+    </script>
+</body>
+</html>

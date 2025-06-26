@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Working with Forms and Interactive Elements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with top tab-based navigation for four sections: "Creating Forms", "Form Widgets", "Submitting Forms", and "Embedding Iframes". This structure continues the established learning pattern. The interactive elements are designed to demystify form creation by breaking down each component and showing its purpose and code in a clear, connected way. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 6.1 (Creating Forms): A themed "Advanced Search Form" is presented. A code block highlights the essential `<form>` attributes (`action`, `method`), explaining how they direct the user's data to a target URL like Google Search. Goal: Explain & Demonstrate. Method: HTML/CSS/JS.
+        - Sec 6.2 (Form Widgets): A "Widget Explorer" with sub-tabs lets users interact with text inputs, checkboxes, radio buttons, and dropdowns. Clicking on an interactive widget will display its specific HTML code, making it easy to learn the syntax for each type. Goal: Deconstruct & Guide. Method: HTML/CSS/JS.
+        - Sec 6.3 (Submitting Forms): A side-by-side comparison of `<input type="submit">` and `<button type="submit">`. An interactive toggle highlights the code for each, explaining the practical differences (e.g., `<button>` allows for richer content like icons). Goal: Compare & Explain. Method: HTML/CSS/JS.
+        - Sec 6.4 (Embedding Iframes): An "Iframe Sandbox" lets users input a URL to see it embedded in a preview pane. The `<iframe>` code updates in real-time. A safe, embeddable map from OpenStreetMap is used as the default example. Goal: Practice & Visualize. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .sub-tab-btn.active {
+            background-color: #d4d4d8; /* stone-300 */
+            color: #1c1917; /* stone-900 */
+        }
+        .sub-content {
+            display: none;
+        }
+        .sub-content.active {
+            display: block;
+        }
+        .interactive-highlight {
+            outline: 2px solid #0ea5e9;
+            background-color: rgba(14, 165, 233, 0.1);
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 6: Working with Forms & Interactive Elements</h1>
+            <p class="mt-2 text-lg text-stone-600">Learn to collect user input and embed external content.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="forms">6.1 Creating Forms</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="widgets">6.2 Form Widgets</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="submitting">6.3 Submitting Forms</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="iframes">6.4 Embedding Iframes</button>
+        </nav>
+
+        <main>
+            <!-- Section 6.1: Creating Forms -->
+            <section id="forms" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">6.1 Creating Forms for Advanced Search</h2>
+                    <p class="text-stone-600 mb-6">Forms are the primary way to collect user input. The `<form>` element wraps your input fields. The `action` attribute specifies where to send the data (like Google's search URL), and the `method="GET"` attribute appends the data to the URL, which is standard for searches.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-4">Themed Google Search Form</h3>
+                            <form action="https://www.google.com/search" method="GET" target="_blank" class="p-4 bg-white border border-stone-200 rounded-lg space-y-4">
+                                <label for="g-search" class="font-medium text-stone-700">Search Google</label>
+                                <input type="text" id="g-search" name="q" class="w-full px-3 py-2 border border-stone-300 rounded-md focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="e.g., HTML forms">
+                                <button type="submit" class="w-full bg-sky-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-sky-600">Search</button>
+                            </form>
+                        </div>
+                        <div class="code-block">
+<pre><code><span class="text-stone-400">&lt;!-- The action points to the submission URL --&gt;</span>
+&lt;form action="https://www.google.com/search" method="GET"&gt;
+
+  <span class="text-stone-400">&lt;!-- The 'name' attribute is critical. 
+       Google's search parameter is "q" --&gt;</span>
+  &lt;input type="text" name="q"&gt;
+
+  &lt;button type="submit"&gt;Search&lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6.2: Form Widgets -->
+            <section id="widgets" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">6.2 Form Widgets</h2>
+                    <p class="text-stone-600 mb-6">HTML provides a variety of input types, or "widgets," for different kinds of data. Click on a widget in the explorer to see its specific HTML code.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-4">Widget Explorer</h3>
+                            <div class="space-y-4">
+                                <!-- Text Input -->
+                                <div class="widget-item p-2 rounded cursor-pointer" data-code="&lt;label for='name'&gt;Name:&lt;/label&gt;&#10;&lt;input type='text' id='name' name='name'&gt;">
+                                    <label for="demo-name" class="font-medium">Name:</label>
+                                    <input type="text" id="demo-name" name="name" class="mt-1 w-full px-3 py-2 border border-stone-300 rounded-md">
+                                </div>
+                                <!-- Checkbox -->
+                                <div class="widget-item p-2 rounded cursor-pointer" data-code="&lt;input type='checkbox' id='agree' name='agree'&gt;&#10;&lt;label for='agree'&gt;I agree to the terms&lt;/label&gt;">
+                                    <input type="checkbox" id="demo-agree" name="agree" class="h-4 w-4 rounded border-stone-300 text-sky-600 focus:ring-sky-500">
+                                    <label for="demo-agree" class="ml-2 font-medium">I agree to the terms</label>
+                                </div>
+                                <!-- Radio Buttons -->
+                                <div class="widget-item p-2 rounded cursor-pointer" data-code="&lt;input type='radio' id='yes' name='confirm' value='yes'&gt;&#10;&lt;label for='yes'&gt;Yes&lt;/label&gt;&#10;&lt;input type='radio' id='no' name='confirm' value='no'&gt;&#10;&lt;label for='no'&gt;No&lt;/label&gt;">
+                                    <p class="font-medium">Confirm?</p>
+                                    <div class="flex gap-4 mt-1">
+                                        <div>
+                                            <input type="radio" id="demo-yes" name="demo-confirm" value="yes" class="h-4 w-4 border-stone-300">
+                                            <label for="demo-yes" class="ml-2">Yes</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="demo-no" name="demo-confirm" value="no" class="h-4 w-4 border-stone-300">
+                                            <label for="demo-no" class="ml-2">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <!-- Dropdown Menu -->
+                                <div class="widget-item p-2 rounded cursor-pointer" data-code="&lt;label for='topic'&gt;Topic:&lt;/label&gt;&#10;&lt;select id='topic' name='topic'&gt;&#10;  &lt;option value='html'&gt;HTML&lt;/option&gt;&#10;  &lt;option value='css'&gt;CSS&lt;/option&gt;&#10;&lt;/select&gt;">
+                                    <label for="demo-topic" class="font-medium">Topic:</label>
+                                    <select id="demo-topic" name="topic" class="mt-1 w-full px-3 py-2 border bg-white border-stone-300 rounded-md">
+                                        <option value="html">HTML</option>
+                                        <option value="css">CSS</option>
+                                        <option value="js">JavaScript</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                             <h4 class="font-semibold text-white mb-2">Widget Code</h4>
+                             <pre><code id="widget-code-output">Click a widget on the left...</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 6.3: Submitting Forms -->
+            <section id="submitting" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">6.3 Submitting Forms</h2>
+                    <p class="text-stone-600 mb-6">You can submit a form with either `<input type="submit">` or `<button type="submit">`. They function identically, but `<button>` is more flexible as it can contain other HTML elements, like icons or styled text. The default behavior for both is to submit the form.</p>
+                     <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane space-y-6">
+                            <div>
+                                <h3 class="font-semibold mb-2">Using &lt;input&gt;</h3>
+                                <form onsubmit="return false;">
+                                    <input type="submit" value="Submit Input" class="w-full bg-stone-500 text-white font-semibold py-2 px-4 rounded-md cursor-pointer hover:bg-stone-600">
+                                </form>
+                            </div>
+                             <div>
+                                <h3 class="font-semibold mb-2">Using &lt;button&gt;</h3>
+                                <form onsubmit="return false;">
+                                    <button type="submit" class="w-full bg-sky-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-sky-600">
+                                        Submit Button
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre><code><span class="text-stone-400">&lt;!-- A simple, un-stylable submit input --&gt;</span>
+&lt;input type="submit" value="Submit Input"&gt;
+
+
+<span class="text-stone-400">&lt;!-- A flexible button that can contain HTML.
+     The 'type="submit"' is important! --&gt;</span>
+&lt;button type="submit"&gt;
+  <span class="text-green-400">&lt;!-- You could add an icon here! --&gt;</span>
+  Submit Button
+&lt;/button&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- Section 6.4: Embedding Iframes -->
+            <section id="iframes" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">6.4 Embedding External Content with Iframes</h2>
+                    <p class="text-stone-600 mb-6">The `<iframe>` element lets you embed another HTML document within the current one. This is great for including content like maps, videos, or even other web applications. Note that not all websites allow themselves to be embedded.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                             <h3 class="font-semibold mb-2">Iframe Sandbox</h3>
+                             <label for="iframe-src" class="text-sm font-medium">Embed URL:</label>
+                             <input type="text" id="iframe-src" class="w-full font-mono text-sm p-2 border border-stone-300 rounded-md" value="https://www.openstreetmap.org/export/embed.html?bbox=-117.93,33.80,-117.90,33.82">
+                             <button id="iframe-update-btn" class="mt-2 w-full px-3 py-1 bg-stone-600 text-white rounded-md hover:bg-stone-700">Update Iframe</button>
+                             <div class="code-block mt-4">
+                                <pre><code id="iframe-code-output"></code></pre>
+                             </div>
+                        </div>
+                        <div class="preview-pane">
+                            <iframe id="iframe-preview" class="w-full h-96 border-0" title="Embedded Content"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('forms');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 6.2 Form Widgets
+            const initWidgets = () => {
+                const section = document.getElementById('widgets');
+                if (!section) return;
+                const widgetItems = section.querySelectorAll('.widget-item');
+                const codeOutput = section.querySelector('#widget-code-output');
+
+                widgetItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        widgetItems.forEach(i => i.classList.remove('interactive-highlight'));
+                        item.classList.add('interactive-highlight');
+                        codeOutput.textContent = item.dataset.code;
+                    });
+                });
+            };
+            
+            // 6.4 Embedding Iframes
+            const initIframes = () => {
+                 const section = document.getElementById('iframes');
+                 if(!section) return;
+                 const srcInput = section.querySelector('#iframe-src');
+                 const updateBtn = section.querySelector('#iframe-update-btn');
+                 const preview = section.querySelector('#iframe-preview');
+                 const codeOutput = section.querySelector('#iframe-code-output');
+
+                 const updateIframe = () => {
+                     const src = srcInput.value;
+                     preview.src = src;
+                     codeOutput.textContent = `<iframe src="${src}"\n  width="600" height="450"\n  style="border:0;" allowfullscreen=""\n  loading="lazy">\n</iframe>`;
+                 };
+                 
+                 updateBtn.addEventListener('click', updateIframe);
+                 updateIframe();
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initWidgets();
+            initIframes();
+        });
+    </script>
+</body>
+</html>

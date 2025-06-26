@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: Introduction to CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone) -->
+    <!-- Application Structure Plan: A single-page application with top tab-based navigation for four sections: "Linking Stylesheets", "CSS Rules", "Styling Elements", and "Colors & Backgrounds". This structure maintains consistency and focuses on the core concepts of CSS. The interactive elements are designed to bridge the gap between code and visual output, which is the central challenge in learning CSS. -->
+    <!-- Visualization & Content Choices: 
+        - Sec 4.1 (Linking): A visual file tree diagram is used. Clicking on `index.html` highlights the necessary `<link>` tag, reinforcing the concept of file paths and the role of the HTML `<head>`. Goal: Explain & Visualize. Method: HTML/CSS/JS.
+        - Sec 4.2 (Rules/Selectors): An "Anatomy of a CSS Rule" diagram interactively breaks down the syntax (selector, property, value). A "Live CSS Sandbox" then allows users to write their own rules targeting a sample table and see the styling applied instantly. Goal: Deconstruct & Practice. Method: HTML/CSS/JS.
+        - Sec 4.3 (Styling): A "Style Playground" provides sliders and inputs to modify properties like `font-size`, `color`, and `border-radius` on sample elements. The CSS code updates in real-time, creating a direct link between the control and the result. Goal: Demonstrate & Experiment. Method: HTML/CSS/JS.
+        - Sec 4.4 (Colors): A "Color Mixer" tool with sliders for RGB values lets users create custom colors. The preview updates instantly, along with the corresponding HEX and HSL values, demonstrating the relationship between different color formats. Goal: Explain & Explore. Method: HTML/CSS/JS.
+        -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .tab-btn.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            border-color: #0ea5e9; /* sky-500 */
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .preview-pane {
+            border: 1px solid #e7e5e4; /* stone-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fafaf9; /* stone-50 */
+        }
+        .interactive-highlight {
+            outline: 2px solid #0ea5e9;
+            background-color: rgba(14, 165, 233, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .file-tree-node {
+             cursor: pointer;
+             transition: background-color 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Chapter 4: Introduction to CSS</h1>
+            <p class="mt-2 text-lg text-stone-600">Learn to style your web pages with Cascading Style Sheets.</p>
+        </header>
+
+        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="linking">4.1 Linking Stylesheets</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="rules">4.2 CSS Rules & Selectors</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="styling">4.3 Styling Elements</button>
+            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="colors">4.4 Colors & Backgrounds</button>
+        </nav>
+
+        <main>
+            <!-- Section 4.1: Linking Stylesheets -->
+            <section id="linking" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">4.1 Linking External Stylesheets</h2>
+                    <p class="text-stone-600 mb-6">To keep your project organized, it's best practice to put your CSS code in a separate file. You then link this file to your HTML document using the `<link>` tag inside the `<head>`. Click on the file tree below to see the required code.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div class="preview-pane">
+                            <h3 class="font-semibold mb-2">Project File Tree</h3>
+                            <div class="font-mono text-sm space-y-2 bg-stone-100 p-4 rounded">
+                                <div>📁 my-website/</div>
+                                <div class="pl-4 file-tree-node rounded p-1" data-file="index">📄 index.html</div>
+                                <div class="pl-4">📁 css/</div>
+                                <div class="pl-8 file-tree-node rounded p-1" data-file="style">📄 style.css</div>
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <h4 class="font-semibold text-white mb-2">Code for <span id="linking-filename">...</span></h4>
+                            <div id="linking-code-output">
+                                <p class="text-stone-400">Click a file to see the relevant code.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4.2: CSS Rules & Selectors -->
+            <section id="rules" class="content-section space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">4.2 Basic CSS Rules and Selectors</h2>
+                    <p class="text-stone-600 mb-6">A CSS rule determines how to style an element. It has two main parts: the **selector** (which element to target) and the **declaration block** (the styles to apply). Try the sandbox below to style a superhero table.</p>
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <div>
+                             <h3 class="font-semibold mb-2">Live CSS Sandbox</h3>
+                             <textarea id="css-sandbox-input" class="w-full font-mono text-sm p-2 border border-stone-300 rounded-md h-40" placeholder="/* Type CSS here */&#10;table { &#10;  border-collapse: collapse;&#10;}&#10;th, td {&#10;  border: 1px solid #ccc;&#10;}&#10;th {&#10;  background-color: #f0f0f0;&#10;}"></textarea>
+                             <style id="css-sandbox-style"></style>
+                        </div>
+                        <div class="preview-pane overflow-x-auto">
+                            <h3 class="font-semibold mb-2">Superhero Table Preview</h3>
+                            <table class="w-full text-sm text-left">
+                                <thead>
+                                    <tr><th>Name</th><th>Alias</th><th>Superpower</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Clark Kent</td><td>Superman</td><td>Flight</td></tr>
+                                    <tr><td>Bruce Wayne</td><td>Batman</td><td>Technology</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 4.3: Styling Elements -->
+            <section id="styling" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">4.3 Styling Text and Elements</h2>
+                    <p class="text-stone-600 mb-6">CSS gives you precise control over the appearance of elements. Use the controls below to style the sample heading and image, and see the CSS code update in real time.</p>
+                     <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="preview-pane flex flex-col items-center justify-center space-y-6">
+                            <h1 id="styling-h1" class="transition-all duration-300">Stylish Heading</h1>
+                            <img id="styling-img" src="https://placehold.co/200x200/0ea5e9/ffffff?text=Style+Me" class="transition-all duration-300" alt="A stylable box">
+                        </div>
+                        <div>
+                             <h3 class="font-semibold mb-2">Style Controls</h3>
+                             <div class="space-y-4">
+                                <div>
+                                    <label for="font-size-slider" class="font-medium">Font Size: <span id="font-size-value">24</span>px</label>
+                                    <input id="font-size-slider" type="range" min="12" max="48" value="24" class="w-full">
+                                </div>
+                                 <div>
+                                    <label for="border-radius-slider" class="font-medium">Image Border Radius: <span id="border-radius-value">8</span>px</label>
+                                    <input id="border-radius-slider" type="range" min="0" max="100" value="8" class="w-full">
+                                </div>
+                             </div>
+                             <div class="code-block mt-6">
+                                <pre><code id="styling-code-output">h1 {
+  font-size: 24px;
+}
+img {
+  border-radius: 8px;
+  height: 150px;
+  width: 150px;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- Section 4.4: Colors & Backgrounds -->
+            <section id="colors" class="content-section space-y-8">
+                 <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4">4.4 Colors and Backgrounds in CSS</h2>
+                    <p class="text-stone-600 mb-6">CSS offers several ways to define colors. The most common are RGB, HEX, and HSL. Use the color mixer below to see how they relate. Adjust the sliders to create a custom background color.</p>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                         <div id="color-mixer-preview" class="preview-pane rounded-lg h-60 transition-colors duration-200"></div>
+                         <div>
+                             <h3 class="font-semibold mb-2">Color Mixer (RGB)</h3>
+                             <div class="space-y-3">
+                                <div>
+                                    <label>Red: <span id="red-value">99</span></label>
+                                    <input type="range" id="red-slider" min="0" max="255" value="99" class="w-full">
+                                </div>
+                                 <div>
+                                    <label>Green: <span id="green-value">102</span></label>
+                                    <input type="range" id="green-slider" min="0" max="255" value="102" class="w-full">
+                                </div>
+                                 <div>
+                                    <label>Blue: <span id="blue-value">241</span></label>
+                                    <input type="range" id="blue-slider" min="0" max="255" value="241" class="w-full">
+                                </div>
+                             </div>
+                             <div class="code-block mt-4 text-sm">
+                                <pre><code id="color-code-output">background-color: #6366f1;
+background-color: rgb(99, 102, 241);
+background-color: hsl(239, 84%, 67%);</code></pre>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CORE TAB SWITCHING LOGIC ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const showTab = (tabId) => {
+                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+                sections.forEach(section => section.classList.toggle('active', section.id === tabId));
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            showTab('linking');
+
+            // --- INTERACTIVITY SETUP ---
+
+            // 4.1 Linking Stylesheets
+            const initLinking = () => {
+                const section = document.getElementById('linking');
+                if (!section) return;
+                const filenameSpan = section.querySelector('#linking-filename');
+                const outputDiv = section.querySelector('#linking-code-output');
+                const files = section.querySelectorAll('.file-tree-node');
+                const codeSnippets = {
+                    index: `&lt;!-- In your HTML file --&gt;
+&lt;head&gt;
+  ...
+  &lt;link rel="stylesheet" href="css/style.css"&gt;
+  ...
+&lt;/head&gt;`,
+                    style: `/* In your CSS file */
+body {
+  font-family: sans-serif;
+  background-color: #f0f0f0;
+}`
+                };
+                files.forEach(file => {
+                    file.addEventListener('click', () => {
+                        const fileId = file.dataset.file;
+                        files.forEach(f => f.classList.remove('interactive-highlight'));
+                        file.classList.add('interactive-highlight');
+                        filenameSpan.textContent = file.textContent.trim();
+                        outputDiv.innerHTML = `<pre><code>${codeSnippets[fileId]}</code></pre>`;
+                    });
+                });
+            };
+
+            // 4.2 CSS Rules & Selectors
+            const initCssSandbox = () => {
+                const section = document.getElementById('rules');
+                if (!section) return;
+                const textarea = section.querySelector('#css-sandbox-input');
+                const styleTag = section.querySelector('#css-sandbox-style');
+                const applyCss = () => {
+                    styleTag.innerHTML = textarea.value;
+                };
+                textarea.addEventListener('input', applyCss);
+                applyCss();
+            };
+
+            // 4.3 Styling Elements
+            const initStylingPlayground = () => {
+                const section = document.getElementById('styling');
+                if (!section) return;
+                const h1 = section.querySelector('#styling-h1');
+                const img = section.querySelector('#styling-img');
+                const fsSlider = section.querySelector('#font-size-slider');
+                const brSlider = section.querySelector('#border-radius-slider');
+                const fsValue = section.querySelector('#font-size-value');
+                const brValue = section.querySelector('#border-radius-value');
+                const codeOutput = section.querySelector('#styling-code-output');
+
+                const updateStyles = () => {
+                    const fs = fsSlider.value;
+                    const br = brSlider.value;
+                    h1.style.fontSize = `${fs}px`;
+                    img.style.borderRadius = `${br}px`;
+                    fsValue.textContent = fs;
+                    brValue.textContent = br;
+                    codeOutput.textContent = `h1 {
+  font-size: ${fs}px;
+}
+img {
+  border-radius: ${br}px;
+  height: 150px; /* Example fixed height */
+  width: 150px;  /* Example fixed width */
+}`;
+                };
+
+                fsSlider.addEventListener('input', updateStyles);
+                brSlider.addEventListener('input', updateStyles);
+                updateStyles();
+            };
+
+            // 4.4 Colors & Backgrounds
+            const initColorMixer = () => {
+                const section = document.getElementById('colors');
+                if (!section) return;
+                const rSlider = section.querySelector('#red-slider');
+                const gSlider = section.querySelector('#green-slider');
+                const bSlider = section.querySelector('#blue-slider');
+                const rValue = section.querySelector('#red-value');
+                const gValue = section.querySelector('#green-value');
+                const bValue = section.querySelector('#blue-value');
+                const preview = section.querySelector('#color-mixer-preview');
+                const codeOutput = section.querySelector('#color-code-output');
+                
+                const updateColor = () => {
+                    const r = rSlider.value;
+                    const g = gSlider.value;
+                    const b = bSlider.value;
+
+                    rValue.textContent = r;
+                    gValue.textContent = g;
+                    bValue.textContent = b;
+
+                    const rgbString = `rgb(${r}, ${g}, ${b})`;
+                    preview.style.backgroundColor = rgbString;
+
+                    const toHex = c => ('0' + parseInt(c).toString(16)).slice(-2);
+                    const hexString = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+                    
+                    // Simple RGB to HSL conversion
+                    let r_ = r/255, g_ = g/255, b_ = b/255;
+                    let cmin = Math.min(r_,g_,b_), cmax = Math.max(r_,g_,b_), delta = cmax - cmin, h = 0, s = 0, l = 0;
+                    if (delta == 0) h = 0;
+                    else if (cmax == r_) h = ((g_ - b_) / delta) % 6;
+                    else if (cmax == g_) h = (b_ - r_) / delta + 2;
+                    else h = (r_ - g_) / delta + 4;
+                    h = Math.round(h * 60);
+                    if (h < 0) h += 360;
+                    l = (cmax + cmin) / 2;
+                    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+                    s = +(s * 100).toFixed(1);
+                    l = +(l * 100).toFixed(1);
+                    const hslString = `hsl(${h}, ${s}%, ${l}%)`;
+
+                    codeOutput.textContent = `background-color: ${hexString};\nbackground-color: ${rgbString};\nbackground-color: ${hslString};`;
+                };
+
+                rSlider.addEventListener('input', updateColor);
+                gSlider.addEventListener('input', updateColor);
+                bSlider.addEventListener('input', updateColor);
+                updateColor();
+            };
+
+            // --- RUN ALL INITIALIZERS ---
+            initLinking();
+            initCssSandbox();
+            initStylingPlayground();
+            initColorMixer();
+        });
+    </script>
+</body>
+</html>

@@ -28,10 +28,8 @@
         .mq-article { display: flex; gap: 1rem; }
         .mq-article-img { width: 33.33%; background-color: #e7e5e4; border-radius: 0.5rem; height: 120px; }
         .mq-article-text { flex: 1; }
-        @media (max-width: 500px) {
-            .mq-article { flex-direction: column; }
-            .mq-article-img { width: 100%; height: 150px; }
-        }
+        .mq-preview-container.mobile .mq-article { flex-direction: column; }
+        .mq-preview-container.mobile .mq-article-img { width: 100%; height: 150px; }
 
         /* Styles for Responsive Image Demo */
         .resizable-container { position: relative; resize: horizontal; overflow: auto; border: 2px dashed #d6d3d1; padding: 1rem; min-width: 320px; max-width: 100%; }
@@ -96,7 +94,7 @@
                             <span id="mq-width-value" class="font-mono bg-stone-200 px-2 py-1 rounded w-20 text-center">1024px</span>
                         </div>
                         <div class="preview-pane overflow-auto">
-                            <div id="mq-preview-container" class="w-full">
+                            <div id="mq-preview-container" class="w-full mq-preview-container">
                                 <div id="mq-status" class="p-2 mb-2 rounded text-center text-white font-bold transition-colors duration-300">Desktop Layout</div>
                                 <article class="mq-article">
                                     <div class="mq-article-img"></div>
@@ -108,16 +106,16 @@
                             </div>
                         </div>
                         <div class="code-block">
-<pre><code><span id="mq-mobile" class="transition-all duration-200">/* Mobile First: Stacked layout for small screens */
+<pre><code><span id="mq-mobile-code" class="transition-all duration-200">/* Mobile First: Stacked layout for small screens */
 @media (max-width: 500px) {
   .mq-article { flex-direction: column; }
 }</span>
-<span id="mq-tablet" class="transition-all duration-200">
+<span id="mq-tablet-code" class="transition-all duration-200">
 /* Tablet: A slightly wider view */
 @media (max-width: 768px) {
   /* Add tablet-specific styles here */
 }</span>
-<span id="mq-desktop" class="transition-all duration-200">
+<span id="mq-desktop-code" class="transition-all duration-200">
 /* Desktop: Side-by-side layout (default) */
 .mq-article {
   display: flex;
@@ -242,93 +240,88 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.tab-btn');
-            const mainContent = document.querySelector('main');
-            let activeTabId = null;
+            const sections = document.querySelectorAll('.content-section');
 
-            // --- REBUILT AND CORRECTED TAB LOGIC ---
-            // This object maps a tab's ID to the function that initializes its interactive elements.
+            // --- REWRITTEN: SIMPLER, MORE ROBUST TAB LOGIC ---
             const initFunctions = {
                 queries: initMediaQueries,
                 images: initResponsiveImages,
                 media: initAudioVideo,
                 script: initScriptDemo,
-                viewport: () => {} // No JS needed for the static viewport demo
+                viewport: () => {} // No JS needed
             };
 
             const showTab = (tabId) => {
-                if (activeTabId === tabId) return; // Do nothing if clicking the active tab
+                // Hide all sections and deactivate all tabs first
+                sections.forEach(sec => {
+                    sec.classList.remove('active', 'show');
+                });
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
 
+                // Find the new section and tab button to activate
                 const newSection = document.getElementById(tabId);
-                const oldSection = activeTabId ? document.getElementById(activeTabId) : null;
+                const newTabButton = document.querySelector(`.tab-btn[data-tab='${tabId}']`);
 
-                // This function handles the showing of the new tab and running its JS.
-                // It's called after the old tab has had time to fade out.
-                const transitionToNewTab = () => {
-                    if (oldSection) {
-                        oldSection.classList.remove('active');
-                    }
+                if (newSection && newTabButton) {
+                    // Activate the new tab and section
+                    newTabButton.classList.add('active');
                     newSection.classList.add('active');
+
+                    // A tiny delay allows the 'display' property to be set before the opacity transition starts
+                    setTimeout(() => {
+                        newSection.classList.add('show');
+                    }, 10);
                     
-                    // Initialize the new section's interactivity if it's the first time.
+                    // Run the initializer function for the section's interactivity if it's the first time
                     if (!newSection.dataset.initialized) {
-                        initFunctions[tabId]();
+                        if (typeof initFunctions[tabId] === 'function') {
+                            initFunctions[tabId]();
+                        }
                         newSection.dataset.initialized = 'true';
                     }
-                    
-                    // Use requestAnimationFrame to ensure the 'active' class is applied before 'show'
-                    // for a proper fade-in transition.
-                    requestAnimationFrame(() => {
-                        newSection.classList.add('show');
-                    });
-                };
-
-                // Update button states
-                tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
-                activeTabId = tabId;
-                history.replaceState(null, '', `#${tabId}`);
-
-                // --- Sequential Transition Logic ---
-                if (oldSection) {
-                    // 1. Start fading out the old section.
-                    oldSection.classList.remove('show');
-                    // 2. After the fade-out is complete (300ms), switch the tabs.
-                    setTimeout(transitionToNewTab, 300);
-                } else {
-                    // If no tab was open (initial page load), show the new tab immediately.
-                    transitionToNewTab();
                 }
+                history.replaceState(null, '', `#${tabId}`);
             };
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', (e) => showTab(e.currentTarget.dataset.tab));
             });
 
-            // Determine and show the initial tab on page load.
+            // Load the correct tab on page load (from URL hash or default)
             const initialTab = window.location.hash?.substring(1) || 'viewport';
-            if (initFunctions.hasOwnProperty(initialTab)) {
+            if (document.getElementById(initialTab)) {
                 showTab(initialTab);
             } else {
-                showTab('viewport'); // Default to 'viewport' if hash is invalid
+                showTab('viewport');
             }
 
 
             // --- INTERACTIVITY INITIALIZER FUNCTIONS ---
-            // These are the same as before, but now they are called reliably by the new tab logic.
 
             function initMediaQueries() {
                 const slider = document.getElementById('mq-width-slider');
                 const widthValue = document.getElementById('mq-width-value');
                 const preview = document.getElementById('mq-preview-container');
                 const status = document.getElementById('mq-status');
-                const codeDesktop = document.getElementById('mq-desktop');
-                const codeTablet = document.getElementById('mq-tablet');
-                const codeMobile = document.getElementById('mq-mobile');
+                const codeDesktop = document.getElementById('mq-desktop-code');
+                const codeTablet = document.getElementById('mq-tablet-code');
+                const codeMobile = document.getElementById('mq-mobile-code');
 
                 slider.addEventListener('input', () => {
                     const width = slider.value;
                     widthValue.textContent = `${width}px`;
                     preview.style.width = `${width}px`;
                     
+                    // Logic to toggle layout class for the preview
+                    if (width <= 500) {
+                        preview.classList.add('mobile');
+                    } else {
+                        preview.classList.remove('mobile');
+                    }
+
+                    // Logic to highlight code
                     codeDesktop.classList.remove('interactive-highlight');
                     codeTablet.classList.remove('interactive-highlight');
                     codeMobile.classList.remove('interactive-highlight');
@@ -378,38 +371,33 @@
 
             function initAudioVideo() {
                 const checkboxes = document.querySelectorAll('#media input[type="checkbox"]');
-                const videoCode = document.getElementById('video-code');
-                const audioCode = document.getElementById('audio-code');
-                
-                const updateCode = (targetId) => {
-                    const element = document.getElementById(targetId);
-                    let attrs = '';
-                    if (element.controls) attrs += ' controls';
-                    if (element.loop) attrs += ' loop';
-                    if (element.muted) attrs += ' muted';
-                    if (element.poster && element.tagName === 'VIDEO') attrs += ' poster="..."';
-                    
-                    const tag = element.tagName.toLowerCase();
-                    const code = `&lt;${tag}${attrs.trim()}&gt;...&lt;/${tag}&gt;`;
-
-                    if(tag === 'video') {
-                        videoCode.innerHTML = code;
-                    } else {
-                        audioCode.innerHTML = code;
-                    }
-                };
                 
                 checkboxes.forEach(box => {
+                    const targetId = box.dataset.target;
+                    const attr = box.dataset.attr;
+                    const targetElement = document.getElementById(targetId);
+                    const codeElement = document.getElementById(targetId === 'demo-video' ? 'video-code' : 'audio-code');
+
+                    const updateCode = () => {
+                        let attrs = '';
+                        if (targetElement.controls) attrs += ' controls';
+                        if (targetElement.loop) attrs += ' loop';
+                        if (targetElement.muted) attrs += ' muted';
+                        if (targetElement.poster && targetElement.tagName === 'VIDEO') attrs += ' poster="..."';
+                        
+                        const tag = targetElement.tagName.toLowerCase();
+                        const code = `&lt;${tag}${attrs.trim()}&gt;...&lt;/${tag}&gt;`;
+                        codeElement.innerHTML = code;
+                    };
+                    
                     box.addEventListener('change', () => {
-                        const targetId = box.dataset.target;
-                        const attr = box.dataset.attr;
-                        const targetElement = document.getElementById(targetId);
                         targetElement[attr] = box.checked;
-                        updateCode(targetId);
+                        updateCode();
                     });
+
+                    // Initial call to set the code correctly
+                    updateCode();
                 });
-                updateCode('demo-video');
-                updateCode('demo-audio');
             }
 
             function initScriptDemo() {

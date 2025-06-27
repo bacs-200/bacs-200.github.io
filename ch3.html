@@ -1,299 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Guide: Organizing Complex Content</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutral (Stone) -->
-    <!-- Application Structure Plan: A single-page application with a top tab-based navigation for three sections: "Creating Tables", "Populating Tables", and "Site Navigation". This modular approach allows learners to concentrate on one advanced topic at a time, building on previous knowledge. The interactions are designed to visually dissect complex structures like tables and site maps, making them easier to understand. -->
-    <!-- Visualization & Content Choices: 
-        - Sec 3.1 (Creating Tables): An interactive "Table Anatomy Explorer" is used. Hovering over parts of a rendered table (header, body, row, cell) highlights the corresponding code and provides an explanation. Goal: Explain & Deconstruct. Method: HTML/CSS/JS.
-        - Sec 3.2 (Populating Tables): A "Content-in-Cell" interactive example. Users can click on different cells in a superhero table (text, link, image-in-link) to see the specific code snippet required to create that content. This isolates and clarifies how to populate individual cells. Goal: Demonstrate & Guide. Method: HTML/CSS/JS.
-        - Sec 3.3 (Site Navigation): A "Site Map Simulator" visually represents a small website. Clicking on a page in the diagram highlights the necessary navigation code, showing how pages link to each other. Goal: Visualize & Explain. Method: HTML/CSS/JS.
-        -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f4; /* stone-100 */
-        }
-        .tab-btn.active {
-            background-color: #0ea5e9; /* sky-500 */
-            color: white;
-            border-color: #0ea5e9; /* sky-500 */
-        }
-        .tab-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .content-section {
-            display: none;
-        }
-        .content-section.active {
-            display: block;
-        }
-        .code-block {
-            background-color: #282c34;
-            color: #abb2bf;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            position: relative;
-        }
-        .preview-pane {
-            border: 1px solid #e7e5e4; /* stone-200 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            background-color: #fafaf9; /* stone-50 */
-        }
-        .table-interactive th, .table-interactive td {
-             transition: background-color 0.2s ease-in-out;
-        }
-        .table-interactive .highlight, .site-map .highlight {
-            outline: 2px solid #0ea5e9;
-            outline-offset: 2px;
-            background-color: rgba(14, 165, 233, 0.1);
-        }
-        .site-map-node {
-             transition: all 0.2s ease-in-out;
-             cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Guide: Organizing Complex Content</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f5f5f4; }
+    .tab-btn.active { background-color: #0ea5e9; color: white; border-color: #0ea5e9; }
+    .tab-btn { transition: all 0.2s ease-in-out; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .code-block { background-color: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; position: relative; }
+    .preview-pane { border: 1px solid #e7e5e4; padding: 1rem; border-radius: 0.5rem; background-color: #fafaf9; }
+    .table-interactive th, .table-interactive td { transition: background-color 0.2s ease-in-out; }
+    .table-interactive .highlight, .site-map .highlight { outline: 2px solid #0ea5e9; outline-offset: 2px; background-color: rgba(14, 165, 233, 0.1); }
+    .site-map-node { transition: all 0.2s ease-in-out; cursor: pointer; }
+  </style>
 </head>
 <body class="text-stone-800">
 
-    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-        
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-stone-900">Chapter 3: Organizing Complex Content</h1>
-            <p class="mt-2 text-lg text-stone-600">Master tables and site-wide navigation to build more structured websites.</p>
-        </header>
+<div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+  <header class="text-center mb-4">
+    <h1 class="text-4xl font-bold text-stone-900">Chapter 3: Organizing Complex Content</h1>
+    <p class="mt-2 text-lg text-stone-600">Master tables and site-wide navigation to build more structured websites.</p>
+  </header>
+  <div class="mb-6 text-sm text-stone-600 text-center">
+    <a href="index.html" class="text-sky-600 hover:underline">&larr; Back to Table of Contents</a>
+  </div>
 
-        <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
-            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="create-tables">3.1 Creating Tables</button>
-            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="populate-tables">3.2 Populating Tables</button>
-            <button class="tab-btn flex-grow text-center px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="navigation">3.3 Site Navigation</button>
-        </nav>
+  <nav class="mb-8 p-1 bg-stone-200 rounded-lg flex flex-wrap justify-center gap-2">
+    <button class="tab-btn flex-grow px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="create-tables">3.1 Creating Tables</button>
+    <button class="tab-btn flex-grow px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="populate-tables">3.2 Populating Tables</button>
+    <button class="tab-btn flex-grow px-4 py-2 rounded-md font-semibold border-2 border-transparent" data-tab="navigation">3.3 Site Navigation</button>
+  </nav>
 
-        <main>
-            <!-- Section 3.1: Creating Tables -->
-            <section id="create-tables" class="content-section space-y-8">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h2 class="text-2xl font-bold mb-4">3.1 Creating Tables</h2>
-                    <p class="text-stone-600 mb-6">Tables are perfect for displaying data in a grid. The structure involves the `<table>` element, `<tr>` for rows, `<th>` for headers, and `<td>` for data cells. Hover over the table elements in the "Anatomy Explorer" to see how the code and the visual output connect.</p>
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <div class="preview-pane">
-                            <h3 class="font-semibold mb-2">Table Anatomy Explorer</h3>
-                            <table class="w-full text-left border-collapse table-interactive">
-                                <thead data-part="thead">
-                                    <tr class="bg-stone-100" data-part="tr">
-                                        <th class="border border-stone-200 p-2" data-part="th">Page Name</th>
-                                        <th class="border border-stone-200 p-2" data-part="th">URL</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-part="tbody">
-                                    <tr data-part="tr">
-                                        <td class="border border-stone-200 p-2" data-part="td">Home</td>
-                                        <td class="border border-stone-200 p-2" data-part="td">index.html</td>
-                                    </tr>
-                                    <tr data-part="tr">
-                                        <td class="border border-stone-200 p-2" data-part="td">About</td>
-                                        <td class="border border-stone-200 p-2" data-part="td">about.html</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="table-info-box" class="code-block">
-                            <h4 class="font-semibold text-white mb-2">Code Breakdown</h4>
-                            <p id="table-info-text" class="text-sm text-stone-400">Hover over the table to learn about its parts.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+  <main>
+    <!-- Section 3.1 -->
+    <section id="create-tables" class="content-section space-y-8">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h2 class="text-2xl font-bold mb-4">3.1 Creating Tables</h2>
+        <p class="text-stone-600 mb-6">Tables include header, body, and footer sections. Hover to explore each part interactively.</p>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="preview-pane">
+            <h3 class="font-semibold mb-2">Table Anatomy Explorer</h3>
+            <table class="w-full text-left border-collapse table-interactive">
+              <caption class="text-stone-500 text-sm mb-2">Simple Website Pages</caption>
+              <thead data-part="thead">
+                <tr class="bg-stone-100" data-part="tr">
+                  <th class="border p-2" data-part="th">Page Name</th>
+                  <th class="border p-2" data-part="th">URL</th>
+                </tr>
+              </thead>
+              <tbody data-part="tbody">
+                <tr data-part="tr" class="odd:bg-stone-50">
+                  <td class="border p-2" data-part="td">Home</td>
+                  <td class="border p-2" data-part="td">index.html</td>
+                </tr>
+                <tr data-part="tr" class="odd:bg-stone-50">
+                  <td class="border p-2" data-part="td">About</td>
+                  <td class="border p-2" data-part="td">about.html</td>
+                </tr>
+              </tbody>
+              <tfoot data-part="tfoot">
+                <tr>
+                  <td class="border p-2 text-stone-500 italic" colspan="2" data-part="td">Last updated: Today</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div id="table-info-box" class="code-block">
+            <h4 class="font-semibold text-white mb-2">Code Breakdown</h4>
+            <p id="table-info-text" class="text-sm text-stone-400">Hover over the table to learn about its parts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <!-- Section 3.2: Populating Tables -->
-            <section id="populate-tables" class="content-section space-y-8">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h2 class="text-2xl font-bold mb-4">3.2 Populating Tables with Content</h2>
-                    <p class="text-stone-600 mb-6">Table cells (`<td>`) can hold more than just text. You can add links, images, and other HTML elements. Click on the cells in the superhero table below to see the specific code used to populate them. Notice how the image is wrapped in a link.</p>
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <div class="preview-pane overflow-x-auto">
-                             <h3 class="font-semibold mb-2">Interactive Superhero Roster</h3>
-                             <table class="w-full text-sm text-left border-collapse table-interactive">
-                                <thead>
-                                    <tr class="bg-stone-100">
-                                        <th class="border border-stone-200 p-2">Name</th>
-                                        <th class="border border-stone-200 p-2">Image</th>
-                                        <th class="border border-stone-200 p-2">Superpower</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;Captain Comet&lt;/td&gt;">Captain Comet</td>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;&lt;a href='#'&gt;&lt;img src='...' alt='Captain Comet'&gt;&lt;/a&gt;&lt;/td&gt;">
-                                            <a href="javascript:void(0);" title="Click to see code">
-                                                <img src="https://placehold.co/80x80/34d399/ffffff?text=CC" alt="Captain Comet" class="mx-auto rounded">
-                                            </a>
-                                        </td>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;Telekinesis&lt;/td&gt;">Telekinesis</td>
-                                    </tr>
-                                     <tr>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;Nova Star&lt;/td&gt;">Nova Star</td>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;&lt;a href='#'&gt;&lt;img src='...' alt='Nova Star'&gt;&lt;/a&gt;&lt;/td&gt;">
-                                            <a href="javascript:void(0);" title="Click to see code">
-                                                <img src="https://placehold.co/80x80/f87171/ffffff?text=NS" alt="Nova Star" class="mx-auto rounded">
-                                            </a>
-                                        </td>
-                                        <td class="border border-stone-200 p-2 cursor-pointer" data-code="&lt;td&gt;Energy Blasts&lt;/td&gt;">Energy Blasts</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                         <div id="populate-info-box" class="code-block">
-                            <h4 class="font-semibold text-white mb-2">Cell Code</h4>
-                            <p id="populate-info-text" class="text-sm text-stone-400">Click a cell to see its HTML code.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Section 3.3: Site Navigation -->
-            <section id="navigation" class="content-section space-y-8">
-                 <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h2 class="text-2xl font-bold mb-4">3.3 Site Navigation</h2>
-                    <p class="text-stone-600 mb-6">Good navigation is essential for users to find their way around your site. Your main `index.html` page should act as a hub with links to all other pages. In turn, each of those pages should have a link to return "Home". Click on the pages in the site map below to see the required navigation code for each.</p>
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <div class="preview-pane flex items-center justify-center">
-                            <div class="site-map space-y-4 text-center">
-                                <div id="map-index" class="site-map-node bg-sky-200 p-4 rounded-lg font-bold">index.html</div>
-                                <div class="flex justify-center items-center text-stone-400">|</div>
-                                <div class="flex justify-around gap-4">
-                                    <div id="map-about" class="site-map-node bg-stone-200 p-3 rounded-lg">about.html</div>
-                                    <div id="map-heroes" class="site-map-node bg-stone-200 p-3 rounded-lg">heroes.html</div>
-                                </div>
-                            </div>
-                        </div>
-                         <div id="nav-info-box" class="code-block">
-                            <h4 id="nav-info-title" class="font-semibold text-white mb-2">Navigation Code</h4>
-                            <div id="nav-info-text">
-                                <p class="text-sm text-stone-400">Click a page in the map to see its navigation code.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <!-- Section 3.2 -->
+    <section id="populate-tables" class="content-section space-y-8">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h2 class="text-2xl font-bold mb-4">3.2 Populating Tables with Content</h2>
+        <p class="text-stone-600 mb-6">Cells can contain links, images, buttons and more. Click each cell to reveal its code.</p>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="preview-pane overflow-x-auto">
+            <h3 class="font-semibold mb-2">Interactive Superhero Roster</h3>
+            <table class="w-full text-sm text-left border-collapse table-interactive">
+              <thead>
+                <tr class="bg-stone-100">
+                  <th class="border p-2">Name</th>
+                  <th class="border p-2">Image</th>
+                  <th class="border p-2">Superpower</th>
+                  <th class="border p-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="odd:bg-stone-50">
+                  <td class="border p-2 cursor-pointer" data-code="&lt;td&gt;Captain Comet&lt;/td&gt;">Captain Comet</td>
+                  <td class="border p-2 cursor-pointer" data-code="&lt;td&gt;&lt;a href='#'&gt;&lt;img src='...' alt='Captain Comet'&gt;&lt;/a&gt;&lt;/td&gt;">
+                    <a href="#"><img src="https://placehold.co/80x80/34d399/ffffff?text=CC" class="mx-auto rounded" alt="Captain Comet" /></a>
+                  </td>
+                  <td class="border p-2 cursor-pointer" data-code="&lt;td&gt;Telekinesis&lt;/td&gt;">Telekinesis</td>
+                  <td class="border p-2 cursor-pointer" data-code="&lt;td&gt;&lt;button&gt;More Info&lt;/button&gt;&lt;/td&gt;">
+                    <button class="bg-sky-500 text-white px-2 py-1 rounded">More Info</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="populate-info-box" class="code-block">
+            <h4 class="font-semibold text-white mb-2">Cell Code</h4>
+            <p id="populate-info-text" class="text-sm text-stone-400">Click a cell to see its HTML code.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        </main>
-    </div>
+    <!-- Section 3.3 -->
+    <section id="navigation" class="content-section space-y-8">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <h2 class="text-2xl font-bold mb-4">3.3 Site Navigation</h2>
+        <p class="text-stone-600 mb-6">Click on a page to see its navigation setup. Use semantic HTML and style consistently.</p>
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div class="preview-pane flex items-center justify-center">
+            <div class="site-map space-y-4 text-center">
+              <div id="map-index" class="site-map-node bg-sky-200 p-4 rounded-lg font-bold">index.html</div>
+              <div class="flex justify-center text-stone-400">|</div>
+              <div class="flex justify-around gap-4">
+                <div id="map-about" class="site-map-node bg-stone-200 p-3 rounded-lg">about.html</div>
+                <div id="map-heroes" class="site-map-node bg-stone-200 p-3 rounded-lg">heroes.html</div>
+              </div>
+            </div>
+          </div>
+          <div id="nav-info-box" class="code-block">
+            <h4 id="nav-info-title" class="font-semibold text-white mb-2">Navigation Code</h4>
+            <div id="nav-info-text">
+              <p class="text-sm text-stone-400">Click a page in the map to see its navigation code.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- CORE TAB SWITCHING LOGIC ---
-            const tabs = document.querySelectorAll('.tab-btn');
-            const sections = document.querySelectorAll('.content-section');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.content-section');
 
-            const showTab = (tabId) => {
-                tabs.forEach(tab => {
-                    tab.classList.toggle('active', tab.dataset.tab === tabId);
-                });
-                sections.forEach(section => {
-                    section.classList.toggle('active', section.id === tabId);
-                });
-            };
+    const showTab = (tabId) => {
+      tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
+      sections.forEach(sec => sec.classList.toggle('active', sec.id === tabId));
+    };
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => showTab(tab.dataset.tab));
-            });
-            
-            // --- INITIALIZE FIRST TAB ---
-            showTab('create-tables');
+    const initialTab = window.location.hash?.substring(1) || 'create-tables';
+    showTab(initialTab);
 
-            // --- INTERACTIVITY SETUP ---
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.dataset.tab;
+        showTab(tabId);
+        history.replaceState(null, '', `#${tabId}`);
+      });
+    });
 
-            // Section 3.1: Creating Tables
-            const initTableAnatomy = () => {
-                const section = document.getElementById('create-tables');
-                if (!section) return;
-                
-                const infoTextElement = section.querySelector('#table-info-text');
-                const tableAnatomy = {
-                    thead: 'The &lt;thead&gt; (table head) contains header information.',
-                    tbody: 'The &lt;tbody&gt; (table body) contains the main table data.',
-                    tr: 'A &lt;tr&gt; (table row) element defines a row of cells.',
-                    th: 'A &lt;th&gt; (table header) cell is for column headings.',
-                    td: 'A &lt;td&gt; (table data) cell contains the data.'
-                };
-                
-                section.querySelectorAll('.table-interactive [data-part]').forEach(part => {
-                    part.addEventListener('mouseover', (e) => {
-                        e.stopPropagation();
-                        const partType = e.currentTarget.dataset.part;
-                        if (infoTextElement && tableAnatomy[partType]) {
-                            infoTextElement.innerHTML = `<span class="text-yellow-300 font-mono">&lt;${partType}&gt;</span>: ${tableAnatomy[partType]}`;
-                        }
-                        e.currentTarget.classList.add('highlight');
-                    });
-                    part.addEventListener('mouseout', (e) => {
-                        e.stopPropagation();
-                        if(infoTextElement) {
-                            infoTextElement.innerHTML = 'Hover over the table to learn about its parts.';
-                        }
-                        e.currentTarget.classList.remove('highlight');
-                    });
-                });
-            };
-            
-            // Section 3.2: Populating Tables
-            const initPopulateTable = () => {
-                const section = document.getElementById('populate-tables');
-                if (!section) return;
+    // Table Anatomy
+    document.querySelectorAll('[data-part]').forEach(el => {
+      el.addEventListener('mouseover', (e) => {
+        const part = e.currentTarget.dataset.part;
+        document.getElementById('table-info-text').innerHTML =
+          `<span class="text-yellow-300 font-mono">&lt;${part}&gt;</span>: ${{
+            thead: 'Table head',
+            tbody: 'Table body',
+            tfoot: 'Table footer',
+            tr: 'Table row',
+            th: 'Header cell',
+            td: 'Data cell'
+          }[part] || ''}`;
+        e.currentTarget.classList.add('highlight');
+      });
+      el.addEventListener('mouseout', (e) => {
+        document.getElementById('table-info-text').textContent = 'Hover over the table to learn about its parts.';
+        e.currentTarget.classList.remove('highlight');
+      });
+    });
 
-                const populateInfoText = section.querySelector('#populate-info-text');
-                section.querySelectorAll('td[data-code]').forEach(cell => {
-                    cell.addEventListener('click', () => {
-                        if (populateInfoText) {
-                            populateInfoText.innerHTML = `<pre><code>${cell.dataset.code}</code></pre>`;
-                        }
-                        section.querySelectorAll('td').forEach(c => c.classList.remove('highlight'));
-                        cell.classList.add('highlight');
-                    });
-                });
-            };
+    // Populating Table
+    document.querySelectorAll('td[data-code]').forEach(cell => {
+      cell.addEventListener('click', () => {
+        document.getElementById('populate-info-text').innerHTML = `<pre><code>${cell.dataset.code}</code></pre>`;
+        document.querySelectorAll('td').forEach(c => c.classList.remove('highlight'));
+        cell.classList.add('highlight');
+      });
+    });
 
-            // Section 3.3: Site Navigation
-            const initSiteNavigation = () => {
-                const section = document.getElementById('navigation');
-                if (!section) return;
-                
-                const navInfoTitle = section.querySelector('#nav-info-title');
-                const navInfoText = section.querySelector('#nav-info-text');
-                const navCode = {
-                    index: { title: 'Navigation for index.html', code: `&lt;nav&gt;\n  &lt;a href="index.html"&gt;Home&lt;/a&gt;\n  &lt;a href="about.html"&gt;About&lt;/a&gt;\n  &lt;a href="heroes.html"&gt;Heroes&lt;/a&gt;\n&lt;/nav&gt;` },
-                    about: { title: 'Navigation for about.html', code: `&lt;!-- On this page, you only need a link back home --&gt;\n&lt;a href="index.html"&gt;Return to Home&lt;/a&gt;` },
-                    heroes: { title: 'Navigation for heroes.html', code: `&lt;!-- This page also just needs a link back home --&gt;\n&lt;a href="index.html"&gt;Return to Home&lt;/a&gt;` }
-                };
-                
-                section.querySelectorAll('.site-map-node').forEach(node => {
-                    node.addEventListener('click', () => {
-                        const pageId = node.id.split('-')[1];
-                        if (navInfoTitle && navInfoText && navCode[pageId]) {
-                            navInfoTitle.textContent = navCode[pageId].title;
-                            navInfoText.innerHTML = `<pre><code>${navCode[pageId].code}</code></pre>`;
-                        }
-                        section.querySelectorAll('.site-map-node').forEach(n => n.classList.remove('highlight'));
-                        node.classList.add('highlight');
-                    });
-                });
-            };
+    // Navigation Code
+    const navMap = {
+      index: { title: 'Navigation for index.html', code: '&lt;nav&gt;\n  &lt;a href="index.html"&gt;Home&lt;/a&gt;\n  &lt;a href="about.html"&gt;About&lt;/a&gt;\n  &lt;a href="heroes.html"&gt;Heroes&lt;/a&gt;\n&lt;/nav&gt;' },
+      about: { title: 'Navigation for about.html', code: '&lt;a href="index.html"&gt;Return to Home&lt;/a&gt;' },
+      heroes: { title: 'Navigation for heroes.html', code: '&lt;a href="index.html"&gt;Return to Home&lt;/a&gt;' }
+    };
+    document.querySelectorAll('.site-map-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const id = node.id.split('-')[1];
+        const info = navMap[id];
+        document.getElementById('nav-info-title').textContent = info.title;
+        document.getElementById('nav-info-text').innerHTML = `<pre><code>${info.code}</code></pre>`;
+        document.querySelectorAll('.site-map-node').forEach(n => n.classList.remove('highlight'));
+        node.classList.add('highlight');
+      });
+    });
+  });
+</script>
 
-            // --- RUN ALL INITIALIZERS ---
-            initTableAnatomy();
-            initPopulateTable();
-            initSiteNavigation();
-        });
-    </script>
 </body>
 </html>

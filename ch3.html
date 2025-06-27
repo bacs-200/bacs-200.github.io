@@ -11,21 +11,27 @@
     .tab-btn.active { background-color: #0ea5e9; color: white; border-color: #0ea5e9; }
     .tab-btn { transition: all 0.2s ease-in-out; }
     
-    /* NEW: Styles for smooth transitions */
     .content-section { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
     .content-section.active { display: block; }
     .content-section.show { opacity: 1; }
 
     .code-block { background-color: #282c34; color: #abb2bf; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; position: relative; font-family: 'Courier New', Courier, monospace; }
     .code-block pre, .code-block code { white-space: pre-wrap; word-wrap: break-word; }
-    .code-block .code-highlight { background-color: rgba(14, 165, 233, 0.2); border-radius: 0.2rem; }
+    
+    /* MODIFIED: Add a transition for the code content itself */
+    .code-block .code-content { transition: opacity 0.15s ease-in-out; }
+    .code-block .code-content.faded { opacity: 0; }
+    
     .code-block .tag { color: #e06c75; }
     .code-block .attr { color: #d19a66; }
     .code-block .string { color: #98c379; }
+    .code-block .comment { color: #5c6370; font-style: italic; }
+
 
     .preview-pane { border: 1px solid #e7e5e4; padding: 1rem; border-radius: 0.5rem; background-color: #fafaf9; }
-    .table-interactive th, .table-interactive td { transition: background-color 0.2s ease-in-out; }
-    .table-interactive .highlight, .site-map-node.highlight { outline: 2px solid #0ea5e9; outline-offset: 2px; background-color: rgba(14, 165, 233, 0.1); }
+    .table-interactive th, .table-interactive td, .table-interactive caption, .table-interactive thead, .table-interactive tbody, .table-interactive tfoot { transition: background-color 0.2s ease-in-out; cursor: pointer; }
+    .table-interactive .highlight { outline: 3px solid #0ea5e9; outline-offset: -1px; background-color: rgba(14, 165, 233, 0.1); }
+    .site-map-node.highlight { outline: 2px solid #0ea5e9; outline-offset: 2px; background-color: rgba(14, 165, 233, 0.1); }
     .site-map-node { transition: all 0.2s ease-in-out; cursor: pointer; }
   </style>
 </head>
@@ -50,90 +56,85 @@
     <section id="create-tables" class="content-section space-y-8">
       <div class="bg-white p-6 rounded-lg shadow-sm">
         <h2 class="text-2xl font-bold mb-4">3.1 Anatomy of a Table</h2>
-        <p class="text-stone-600 mb-6">Tables organize data in rows and columns. They have three main semantic parts: a head `<thead>`, a body `<tbody>`, and a footer `<tfoot>`. Hover over the table preview to see how the code and the visual result are connected.</p>
+        <p class="text-stone-600 mb-6">Tables organize data with tags that define a head, body, rows, and cells. For a beginner, this can seem like a lot of code! Let's break it down. **Hover over any part of the table preview** to isolate its specific code and see a simple explanation.</p>
         <div class="grid lg:grid-cols-2 gap-6">
           <div class="preview-pane">
             <h3 class="font-semibold mb-2">Interactive Preview: Class Schedule</h3>
             <table id="anatomy-table" class="w-full text-left border-collapse table-interactive">
-              <caption class="text-stone-500 text-sm mb-2" data-part="caption" data-desc="The <caption> tag provides a title for your table, which is great for accessibility.">Fall Semester Schedule</caption>
-              <thead data-part="thead" data-desc="The <thead> (Table Head) acts as the header for your table. It contains the column titles, like in a spreadsheet. It tells the browser 'this is the top row'.">
-                <tr class="bg-stone-100" data-part="tr" data-desc="The <tr> (Table Row) tag creates a new row within any section of the table.">
-                  <th class="border p-2" data-part="th" data-desc="The <th> (Table Header) tag is used for column titles. Browsers usually make them bold and centered by default.">Course</th>
-                  <th class="border p-2" data-part="th" data-desc="The <th> (Table Header) tag is used for column titles.">Time</th>
-                  <th class="border p-2" data-part="th" data-desc="The <th> (Table Header) tag is used for column titles.">Instructor</th>
+              <caption data-part="caption" data-desc="The <caption> provides a title for the table. It's one simple tag.">Fall Semester Schedule</caption>
+              <thead data-part="thead" data-desc="The <thead> (Table Head) wraps the header row(s). Think of it as a container for your column titles.">
+                <tr data-part="tr-head" data-desc="A <tr> (Table Row) inside the head. This row holds the special <th> header cells.">
+                  <th class="border p-2" data-part="th" data-desc="A <th> (Table Header) cell is used for titles. 'Course' is the title for this column.">Course</th>
+                  <th class="border p-2" data-part="th" data-desc="This <th> holds the 'Time' title.">Time</th>
+                  <th class="border p-2" data-part="th" data-desc="This <th> holds the 'Instructor' title.">Instructor</th>
                 </tr>
               </thead>
-              <tbody data-part="tbody" data-desc="The <tbody> (Table Body) contains the main data of your table, with each row representing an entry.">
-                <tr class="odd:bg-stone-50" data-part="tr" data-desc="The <tr> (Table Row) tag creates a new row.">
-                  <td class="border p-2" data-part="td" data-desc="The <td> (Table Data) tag holds a single piece of data, also known as a cell.">Web Development 101</td>
-                  <td class="border p-2" data-part="td" data-desc="A <td> cell.">10:00 AM</td>
-                  <td class="border p-2" data-part="td" data-desc="A <td> cell.">Dr. Ada Lovelace</td>
+              <tbody data-part="tbody" data-desc="The <tbody> (Table Body) is the container for all the main data rows of the table.">
+                <tr class="odd:bg-stone-50" data-part="tr-body" data-desc="This <tr> (Table Row) contains the cells for one complete entry in our schedule.">
+                  <td class="border p-2" data-part="td" data-desc="A <td> (Table Data) cell holds one piece of information, like the course name here.">Web Development 101</td>
+                  <td class="border p-2" data-part="td" data-desc="This <td> cell holds the time for the course.">10:00 AM</td>
+                  <td class="border p-2" data-part="td" data-desc="This <td> cell holds the instructor's name.">Dr. Ada Lovelace</td>
                 </tr>
-                <tr class="odd:bg-stone-50" data-part="tr" data-desc="The <tr> (Table Row) tag creates a new row.">
+                <tr class="odd:bg-stone-50" data-part="tr-body" data-desc="Here's a second <tr> row for another class entry.">
                   <td class="border p-2" data-part="td" data-desc="A <td> cell.">CSS Adventures</td>
                   <td class="border p-2" data-part="td" data-desc="A <td> cell.">1:00 PM</td>
                   <td class="border p-2" data-part="td" data-desc="A <td> cell.">Prof. Håkon Lie</td>
                 </tr>
               </tbody>
-              <tfoot data-part="tfoot" data-desc="The <tfoot> (Table Foot) is for summary information at the bottom of the table, like totals or footnotes.">
-                <tr class="bg-stone-100" data-part="tr" data-desc="The <tr> (Table Row) tag creates a new row.">
-                  <td class="border p-2 text-stone-500 italic" colspan="3" data-part="td" data-desc="A <td> cell. The 'colspan' attribute makes this cell span across 3 columns.">Total Credits: 6</td>
-                </tr>
-              </tfoot>
             </table>
           </div>
           <div id="table-info-box" class="code-block">
             <h4 class="font-semibold text-white mb-2">Code Breakdown</h4>
-            <div id="table-info-desc" class="text-sm text-stone-400 mb-4">Hover over the table preview to learn about its parts.</div>
-            <pre><code id="table-code-display"></code></pre>
+            <div id="table-info-desc" class="text-sm text-stone-400 mb-4 h-16">Hover over the table preview to learn about its parts.</div>
+            <pre><code id="table-code-content" class="code-content"></code></pre>
           </div>
         </div>
       </div>
     </section>
 
     <section id="populate-tables" class="content-section space-y-8">
-      <div class="bg-white p-6 rounded-lg shadow-sm">
+        <div class="bg-white p-6 rounded-lg shadow-sm">
         <h2 class="text-2xl font-bold mb-4">3.2 Interactive Table Content</h2>
         <p class="text-stone-600 mb-6">Table cells (`<td>`) are powerful containers. You can put almost any HTML element inside them. Try editing a hero's name below to see the code update instantly!</p>
         <div class="grid lg:grid-cols-2 gap-6">
-          <div class="preview-pane overflow-x-auto">
+            <div class="preview-pane overflow-x-auto">
             <h3 class="font-semibold mb-2">Live-Edit Superhero Roster</h3>
             <table class="w-full text-sm text-left border-collapse">
-              <thead>
+                <thead>
                 <tr class="bg-stone-100">
-                  <th class="border p-2">Name</th>
-                  <th class="border p-2">Image</th>
-                  <th class="border p-2">Abilities</th>
-                  <th class="border p-2">Action</th>
+                    <th class="border p-2">Name</th>
+                    <th class="border p-2">Image</th>
+                    <th class="border p-2">Abilities</th>
+                    <th class="border p-2">Action</th>
                 </tr>
-              </thead>
-              <tbody>
+                </thead>
+                <tbody>
                 <tr class="odd:bg-white">
-                  <td class="border p-2 font-semibold" id="hero-name-cell">Captain Comet</td>
-                  <td class="border p-2"><img src="https://placehold.co/80x80/34d399/ffffff?text=CC" class="mx-auto rounded" alt="Captain Comet" /></td>
-                  <td class="border p-2">Telekinesis, Flight</td>
-                  <td class="border p-2 text-center"><button class="bg-sky-500 text-white px-3 py-1 rounded hover:bg-sky-600">Profile</button></td>
+                    <td class="border p-2 font-semibold" id="hero-name-cell">Captain Comet</td>
+                    <td class="border p-2"><img src="https://placehold.co/80x80/34d399/ffffff?text=CC" class="mx-auto rounded" alt="Captain Comet" /></td>
+                    <td class="border p-2">Telekinesis, Flight</td>
+                    <td class="border p-2 text-center"><button class="bg-sky-500 text-white px-3 py-1 rounded hover:bg-sky-600">Profile</button></td>
                 </tr>
                 <tr class="odd:bg-white bg-stone-50">
-                  <td class="border p-2 font-semibold">Dr. Aurora</td>
-                  <td class="border p-2"><img src="https://placehold.co/80x80/f472b6/ffffff?text=DA" class="mx-auto rounded" alt="Dr. Aurora" /></td>
-                  <td class="border p-2">Light Manipulation</td>
-                  <td class="border p-2 text-center"><button class="bg-sky-500 text-white px-3 py-1 rounded hover:bg-sky-600">Profile</button></td>
+                    <td class="border p-2 font-semibold">Dr. Aurora</td>
+                    <td class="border p-2"><img src="https://placehold.co/80x80/f472b6/ffffff?text=DA" class="mx-auto rounded" alt="Dr. Aurora" /></td>
+                    <td class="border p-2">Light Manipulation</td>
+                    <td class="border p-2 text-center"><button class="bg-sky-500 text-white px-3 py-1 rounded hover:bg-sky-600">Profile</button></td>
                 </tr>
-              </tbody>
+                </tbody>
             </table>
             <div class="mt-4">
-              <label for="hero-name-input" class="font-semibold text-sm">Edit First Hero's Name:</label>
-              <input type="text" id="hero-name-input" class="w-full mt-1 p-2 border rounded border-stone-300" value="Captain Comet">
+                <label for="hero-name-input" class="font-semibold text-sm">Edit First Hero's Name:</label>
+                <input type="text" id="hero-name-input" class="w-full mt-1 p-2 border rounded border-stone-300" value="Captain Comet">
             </div>
-          </div>
-          <div class="code-block">
+            </div>
+            <div class="code-block">
             <h4 class="font-semibold text-white mb-2">Live Code for First Row</h4>
             <p class="text-sm text-stone-400 mb-4">The HTML for the first hero row will update as you type in the input box above.</p>
             <pre><code id="populate-code-display"></code></pre>
-          </div>
+            </div>
         </div>
-      </div>
+        </div>
     </section>
 
     <section id="navigation" class="content-section space-y-8">
@@ -167,115 +168,130 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Utility for escaping HTML ---
+    const escapeHTML = (str) => {
+        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // --- Tab Switching Logic (Unchanged) ---
     const tabs = document.querySelectorAll('.tab-btn');
     const sections = document.querySelectorAll('.content-section');
-    let currentTabId = 'create-tables'; // Default tab
+    let currentTabId = 'create-tables';
 
-    // --- Tab Switching Logic ---
     const showTab = (tabId) => {
-        // Fade out the currently active section
         const activeSection = document.querySelector('.content-section.active');
         if (activeSection) {
             activeSection.classList.remove('show');
             setTimeout(() => {
                 activeSection.classList.remove('active');
-                
-                // Find and fade in the new section
                 const newSection = document.getElementById(tabId);
                 if (newSection) {
                     newSection.classList.add('active');
-                    // Use requestAnimationFrame to ensure the 'active' class is applied before 'show'
-                    requestAnimationFrame(() => {
-                        newSection.classList.add('show');
-                    });
+                    requestAnimationFrame(() => { newSection.classList.add('show'); });
                 }
-            }, 300); // This duration should match the CSS transition time
+            }, 300);
         } else {
-            // For the initial load, just show the section
             const newSection = document.getElementById(tabId);
             if (newSection) {
                 newSection.classList.add('active');
                 newSection.classList.add('show');
             }
         }
-        
-        // Update button styles
         tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
         currentTabId = tabId;
         history.replaceState(null, '', `#${tabId}`);
     };
 
     tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            showTab(tab.dataset.tab);
-        });
+        tab.addEventListener('click', () => { showTab(tab.dataset.tab); });
     });
 
-    // --- Utility for escaping HTML ---
-    const escapeHTML = (str) => {
-        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // --- Section 3.1: Table Anatomy ---
+    // --- Section 3.1: Table Anatomy (HEAVILY MODIFIED) ---
     const tableAnatomy = {
-        tableCodeDisplay: document.getElementById('table-code-display'),
-        tableInfoDesc: document.getElementById('table-info-desc'),
-        fullTableHTML: document.getElementById('anatomy-table').outerHTML,
+        codeContent: document.getElementById('table-code-content'),
+        infoDesc: document.getElementById('table-info-desc'),
         
+        // NEW: A default "skeleton" view of the code
+        skeletonCode: `<span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="comment">&lt;!-- Headers like 'Course' and 'Time' go here --&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="comment">&lt;!-- Data rows for each class go here --&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+<span class="tag">&lt;/table&gt;</span>`,
+
         init: function() {
-            this.renderCode(this.fullTableHTML);
+            this.showCode(this.skeletonCode); // Show skeleton on load
             document.querySelectorAll('#anatomy-table [data-part]').forEach(el => {
                 el.addEventListener('mouseover', (e) => this.handleMouseOver(e));
                 el.addEventListener('mouseout', (e) => this.handleMouseOut(e));
             });
         },
         
-        renderCode: function(html, highlightPart = '') {
-            let code = escapeHTML(html);
-            if (highlightPart) {
-                const escapedPart = escapeHTML(highlightPart);
-                code = code.replace(escapedPart, `<span class="code-highlight">${escapedPart}</span>`);
+        // NEW: Helper function to fade and update code
+        showCode: function(htmlContent, description = 'Hover over the table preview to learn about its parts.') {
+            this.codeContent.classList.add('faded');
+            setTimeout(() => {
+                this.infoDesc.innerHTML = description;
+                this.codeContent.innerHTML = htmlContent;
+                this.codeContent.classList.remove('faded');
+            }, 150); // Match CSS transition
+        },
+
+        // NEW: Generates simplified code snippets
+        getCodeSnippet: function(element) {
+            const part = element.dataset.part;
+            switch(part) {
+                case 'thead':
+                case 'tbody':
+                    // Shows the container tag and a comment for its content
+                    return `<span class="tag">&lt;${part}&gt;</span>\n  <span class="comment">&lt;!-- All the ${part === 'thead' ? 'header' : 'data'} rows go inside here --&gt;</span>\n<span class="tag">&lt;/${part}&gt;</span>`;
+                case 'tr-head':
+                case 'tr-body':
+                    // Shows the row and its direct children cells
+                    return escapeHTML(element.outerHTML.replace(/ class="[^"]*"/g, '')); // remove class for simplicity
+                case 'th':
+                case 'td':
+                case 'caption':
+                    // Shows just the single cell/caption tag
+                    return escapeHTML(element.outerHTML.replace(/ class="[^"]*"/g, ''));
+                default:
+                    return this.skeletonCode;
             }
-            this.tableCodeDisplay.innerHTML = code;
         },
 
         handleMouseOver: function(e) {
             e.stopPropagation();
             const target = e.currentTarget;
             target.classList.add('highlight');
-            this.tableInfoDesc.innerHTML = `<strong class="text-sky-400 font-mono">&lt;${target.dataset.part}&gt;</strong>: ${target.dataset.desc}`;
-            
-            // Highlight the corresponding code
-            const partHTML = target.outerHTML;
-            this.renderCode(this.fullTableHTML, partHTML.split('>')[0] + '>'); // Highlight opening tag
+            const snippet = this.getCodeSnippet(target);
+            const description = `<strong class="text-sky-400 font-mono">&lt;${target.dataset.part.split('-')[0]}&gt;</strong>: ${target.dataset.desc}`;
+            this.showCode(snippet, description);
         },
 
         handleMouseOut: function(e) {
-            e.currentTarget.classList.remove('highlight');
-            this.tableInfoDesc.innerHTML = 'Hover over the table preview to learn about its parts.';
-            this.renderCode(this.fullTableHTML);
+            document.querySelectorAll('#anatomy-table .highlight').forEach(el => el.classList.remove('highlight'));
+            this.showCode(this.skeletonCode);
         }
     };
     tableAnatomy.init();
 
 
-    // --- Section 3.2: Populating Tables ---
+    // --- Section 3.2: Populating Tables (Unchanged from previous version) ---
     const liveTableEdit = {
         nameCell: document.getElementById('hero-name-cell'),
         nameInput: document.getElementById('hero-name-input'),
         codeDisplay: document.getElementById('populate-code-display'),
-        
         init: function() {
             this.nameInput.addEventListener('input', () => this.update());
-            this.update(); // Initial render
+            this.update();
         },
-
         update: function() {
             const newName = this.nameInput.value;
             this.nameCell.textContent = newName;
             this.renderCode(newName);
         },
-
         renderCode: function(name) {
             const escapedName = escapeHTML(name);
             const html = `
@@ -291,12 +307,11 @@ document.addEventListener('DOMContentLoaded', () => {
     liveTableEdit.init();
 
 
-    // --- Section 3.3: Site Navigation ---
+    // --- Section 3.3: Site Navigation (Unchanged from previous version) ---
     const navPreviewer = {
       navInfoTitle: document.getElementById('nav-info-title'),
       navInfoText: document.getElementById('nav-info-text'),
       navPreviewPane: document.getElementById('nav-preview-pane'),
-      
       navData: {
         index: {
           title: 'Home Page Navigation',
@@ -326,21 +341,17 @@ document.addEventListener('DOMContentLoaded', () => {
           code: escapeHTML(`<nav>\n  <ul>\n    <li><a href="index.html">Home</a></li>\n    <li><a href="about.html">About</a></li>\n    <li><a href="heroes.html" class="active">Heroes</a></li>\n  </ul>\n</nav>`)
         }
       },
-      
       init: function() {
         document.querySelectorAll('.site-map-node').forEach(node => {
           node.addEventListener('click', (e) => this.showNav(e.currentTarget));
         });
       },
-      
       showNav: function(node) {
         const pageId = node.dataset.page;
         const data = this.navData[pageId];
-        
         this.navInfoTitle.textContent = data.title;
         this.navInfoText.innerHTML = `<pre><code>${data.code}</code></pre>`;
         this.navPreviewPane.innerHTML = data.preview;
-        
         document.querySelectorAll('.site-map-node').forEach(n => n.classList.remove('highlight', 'bg-sky-200'));
         node.classList.add('highlight', 'bg-sky-200');
       }

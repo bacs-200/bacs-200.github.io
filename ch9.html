@@ -242,54 +242,78 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.tab-btn');
-            const sections = document.querySelectorAll('.content-section');
+            const mainContent = document.querySelector('main');
             let activeTabId = null;
 
-            // --- REBUILT TAB & INITIALIZATION LOGIC ---
+            // --- REBUILT AND CORRECTED TAB LOGIC ---
+            // This object maps a tab's ID to the function that initializes its interactive elements.
             const initFunctions = {
                 queries: initMediaQueries,
                 images: initResponsiveImages,
                 media: initAudioVideo,
                 script: initScriptDemo,
-                viewport: () => {} // No JS needed for viewport demo
+                viewport: () => {} // No JS needed for the static viewport demo
             };
 
             const showTab = (tabId) => {
-                if (activeTabId === tabId) return;
+                if (activeTabId === tabId) return; // Do nothing if clicking the active tab
 
                 const newSection = document.getElementById(tabId);
-                if (!newSection) return;
-
-                // Fade out the old section
                 const oldSection = activeTabId ? document.getElementById(activeTabId) : null;
-                if (oldSection) {
-                    oldSection.classList.remove('show');
-                    setTimeout(() => { oldSection.classList.remove('active'); }, 300);
-                }
 
-                // Fade in the new section
-                setTimeout(() => {
+                // This function handles the showing of the new tab and running its JS.
+                // It's called after the old tab has had time to fade out.
+                const transitionToNewTab = () => {
+                    if (oldSection) {
+                        oldSection.classList.remove('active');
+                    }
                     newSection.classList.add('active');
-                    requestAnimationFrame(() => { newSection.classList.add('show'); });
-
-                    // Initialize section's JS if it hasn't been already
+                    
+                    // Initialize the new section's interactivity if it's the first time.
                     if (!newSection.dataset.initialized) {
                         initFunctions[tabId]();
                         newSection.dataset.initialized = 'true';
                     }
-                }, oldSection ? 300 : 0);
+                    
+                    // Use requestAnimationFrame to ensure the 'active' class is applied before 'show'
+                    // for a proper fade-in transition.
+                    requestAnimationFrame(() => {
+                        newSection.classList.add('show');
+                    });
+                };
 
+                // Update button states
                 tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabId));
                 activeTabId = tabId;
                 history.replaceState(null, '', `#${tabId}`);
+
+                // --- Sequential Transition Logic ---
+                if (oldSection) {
+                    // 1. Start fading out the old section.
+                    oldSection.classList.remove('show');
+                    // 2. After the fade-out is complete (300ms), switch the tabs.
+                    setTimeout(transitionToNewTab, 300);
+                } else {
+                    // If no tab was open (initial page load), show the new tab immediately.
+                    transitionToNewTab();
+                }
             };
 
-            tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => showTab(e.currentTarget.dataset.tab));
+            });
+
+            // Determine and show the initial tab on page load.
             const initialTab = window.location.hash?.substring(1) || 'viewport';
-            showTab(initFunctions.hasOwnProperty(initialTab) ? initialTab : 'viewport');
+            if (initFunctions.hasOwnProperty(initialTab)) {
+                showTab(initialTab);
+            } else {
+                showTab('viewport'); // Default to 'viewport' if hash is invalid
+            }
 
 
-            // --- INTERACTIVITY INITIALIZERS ---
+            // --- INTERACTIVITY INITIALIZER FUNCTIONS ---
+            // These are the same as before, but now they are called reliably by the new tab logic.
 
             function initMediaQueries() {
                 const slider = document.getElementById('mq-width-slider');
@@ -310,15 +334,15 @@
                     codeMobile.classList.remove('interactive-highlight');
 
                     if (width <= 500) {
-                        status.style.backgroundColor = '#f97316'; // orange-500
+                        status.style.backgroundColor = '#f97316';
                         status.textContent = 'Mobile Layout Active (<500px)';
                         codeMobile.classList.add('interactive-highlight');
                     } else if (width <= 768) {
-                        status.style.backgroundColor = '#16a34a'; // green-600
+                        status.style.backgroundColor = '#16a34a';
                         status.textContent = 'Tablet Layout Active (<768px)';
                         codeTablet.classList.add('interactive-highlight');
                     } else {
-                        status.style.backgroundColor = '#2563eb'; // blue-600
+                        status.style.backgroundColor = '#2563eb';
                         status.textContent = 'Desktop Layout Active';
                         codeDesktop.classList.add('interactive-highlight');
                     }
@@ -345,8 +369,6 @@
                 };
 
                 const resizeObserver = new ResizeObserver(() => {
-                    // The browser handles the image swap. We just check the result.
-                    // A small timeout allows the browser to finish swapping the src.
                     setTimeout(checkImageSource, 50); 
                 });
 
@@ -365,9 +387,9 @@
                     if (element.controls) attrs += ' controls';
                     if (element.loop) attrs += ' loop';
                     if (element.muted) attrs += ' muted';
-                    if (element.poster) attrs += ' poster="..."';
+                    if (element.poster && element.tagName === 'VIDEO') attrs += ' poster="..."';
                     
-                    const tag = targetId === 'demo-video' ? 'video' : 'audio';
+                    const tag = element.tagName.toLowerCase();
                     const code = `&lt;${tag}${attrs.trim()}&gt;...&lt;/${tag}&gt;`;
 
                     if(tag === 'video') {

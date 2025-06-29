@@ -386,7 +386,13 @@
                         if (targetElement.poster && targetElement.tagName === 'VIDEO') attrs += ' poster="..."';
                         
                         const tag = targetElement.tagName.toLowerCase();
-                        const code = `&lt;${tag}${attrs.trim()}&gt;...&lt;/${tag}&gt;`;
+                        let code = `&lt;${tag}${attrs}&gt;\n`;
+                        if (tag === 'video') {
+                            code += '  &lt;source src="path/to/video.mp4" type="video/mp4"&gt;\n';
+                        } else {
+                            code += '  &lt;source src="path/to/audio.mp3" type="audio/mpeg"&gt;\n';
+                        }
+                        code += `&lt;/${tag}&gt;`;
                         codeElement.innerHTML = code;
                     };
                     
@@ -409,6 +415,7 @@
                     demoText.classList.remove('text-stone-500');
                     demoText.classList.add('text-green-600');
                     demoBtn.textContent = 'Done!';
+                    demoBtn.classList.remove('bg-sky-500', 'hover:bg-sky-600');
                     demoBtn.classList.add('bg-green-600', 'cursor-not-allowed');
                     demoBtn.disabled = true;
                 });
